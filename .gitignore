@@ -428,3 +428,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+src/DataClass/obj/Debug/net8.0/DataClass.dll
+src/DataClass/obj/Debug/net8.0/DataClass.pdb
+src/DataClass/obj/Debug/net8.0/DataClass.sourcelink.json
+src/DataClass/obj/Debug/net8.0/ref/DataClass.dll
+src/DataClass/obj/Debug/net8.0/refint/DataClass.dll
