@@ -1,6 +1,6 @@
 ﻿namespace Adapter.DBModel
 {
-    public class Message
+    public class MessageLog
     {
         public long Id { get; set; }
 
@@ -12,6 +12,9 @@
 
         public long SendUserId { get; set; }
 
+        /// <summary>
+        /// 傳遞給哪些使用者
+        /// </summary>
         public long ToUserId { get;set; }
 
         public DateTime SendTime { get; set; }

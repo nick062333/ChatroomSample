@@ -8,7 +8,8 @@ namespace Adapter
     {
         public DbSet<User> User { get; set; }
         public DbSet<Chatroom> Chatroom { get; set; }
-        public DbSet<Message> Message { get; set; }
+        public DbSet<ChatroomMember> ChatroomMember { get; set; }
+        public DbSet<MessageLog> MessageLog { get; set; }
 
         public ChatroomDBContext(DbContextOptions<ChatroomDBContext> options) : base(options)
         {
@@ -18,7 +19,8 @@ namespace Adapter
         {
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ChatroomEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new MessageEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new MessageLogEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ChatroomMemberEntityTypeConfiguration());
         }
     }
 }
