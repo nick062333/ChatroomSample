@@ -12,7 +12,8 @@
   "dependencies": {
     "@latelier/vue-signalr": "^2.0.4",
     "@microsoft/signalr": "^7.0.11",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.3.4",
