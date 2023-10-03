@@ -12,6 +12,8 @@
 
         public long SendUserId { get; set; }
 
+        public long ToUserId { get;set; }
+
         public DateTime SendTime { get; set; }
     }
 }
