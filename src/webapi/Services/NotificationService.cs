@@ -11,7 +11,7 @@ namespace webapi.Services
     public NotificationService(IHubContext<NotificationHub> hubContext) =>
         _hubContext = hubContext;
 
-    public Task SendNotificationAsync(Notification notification) =>
+    public Task SendNotificationAsync(NotificationRequest notification) =>
         notification is not null
             ? _hubContext.Clients.All.SendAsync("NotificationReceived", notification)
             : Task.CompletedTask;

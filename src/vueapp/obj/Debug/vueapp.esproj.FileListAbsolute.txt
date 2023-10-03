@@ -1,0 +1,2 @@
+C:\Users\nick.huang23\source\repos\Chatroom\vueapp\obj\Debug\vueapp.esproj.CoreCompileInputs.cache
+C:\Users\nick.huang23\source\repos\Chatroom\src\vueapp\obj\Debug\vueapp.esproj.CoreCompileInputs.cache

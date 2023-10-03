@@ -1,7 +1,7 @@
 <script setup>
 // import { ref } from 'vue'
 
-import * as signalR from '@microsoft/signalr';
+import signalR from '@microsoft/signalr';
 // const signalR = require("@microsoft/signalr")
 
 let connection = new signalR.HubConnectionBuilder()
@@ -23,7 +23,7 @@ connection.start()
     .then(() => {
 
         console.log('start');
-        connection.invoke("send", "Hello");
+        connection.invoke("NewSend", "Hello");
 
     });
 
@@ -31,6 +31,7 @@ connection.start()
 
 <template>
   <p class="greeting">{{ greeting }}</p>
+  <p></p>
 </template>
 
 <style>

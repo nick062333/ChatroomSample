@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Chatroom.sln",
+                "${workspaceFolder}/src/Chatroom.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Chatroom.sln",
+                "${workspaceFolder}/src/Chatroom.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Chatroom.sln"
+                "${workspaceFolder}/src/Chatroom.sln"
             ],
             "problemMatcher": "$msCompile"
         }
