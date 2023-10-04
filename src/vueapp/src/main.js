@@ -7,8 +7,12 @@ import Chatroom from './components/Chatroom.vue'
 
 import { createRouter, createWebHashHistory } from 'vue-router'
 
+import './assets/main.css'
 
-const Home = { template: '<div>Home3213123123</div>' }
+import Store from './store/index.js';
+import Vuex from 'vuex';
+
+const Home = { template: '<div>Home Test</div>' }
 const About = { template: '<div>About</div>' }
 
 const routes = [
@@ -19,11 +23,14 @@ const routes = [
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes, 
+    routes
 })
 
 const app = createApp(App)
 
 app.use(router)
+
+app.use(Vuex);
+app.use(Store)
 
 app.mount('#app')
