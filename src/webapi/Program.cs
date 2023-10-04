@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapHub<NotificationHub>("/chat");
+app.MapHub<NotificationHub>("/notification");
 
 //var summaries = new[]
 //{

@@ -9,8 +9,9 @@ namespace webapi.Hubs
         public async Task SendMessage(NotificationRequest notification)
         {
             await Clients
-                .User(notification.UserId)
-                .ReceiveMessage(notification.UserId, DateTime.Now.AddHours(8));
+                .All
+                // .User(notification.UserId)
+                .ReceiveMessage(notification.UserId, notification.Message, DateTime.Now.AddHours(8));
         }
     }
 }

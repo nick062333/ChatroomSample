@@ -1,48 +1,52 @@
-<script setup>
-// import HelloWorld from './components/HelloWorld.vue'
-// import TheWelcome from './components/TheWelcome.vue'
-import SignalRSmaple1 from './components/SignalRSmaple1.vue'
-</script>
+
+<style scoped>
+    /* 當<style>標籤具有該scoped屬性時，其 CSS 將僅套用於目前組件的元素。這類似於 Shadow DOM 中的樣式封裝。 */
+   a {
+    display:inline;
+    margin-right: 15px;
+  }
+
+  main {
+    display:inline;
+  }
+</style>
+
 
 <template>
   <header>
     <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
-
+    <p>
+      <router-link to="/">Home</router-link>
+      <router-link to="/SignalRSmaple1">Signalr測試</router-link>
+      <router-link to="/SignalRSmaple1">建立使用者</router-link>
+      <router-link to="/Chatroom">聊天室</router-link>
+    </p>
     <div class="wrapper">
-      <SignalRSmaple1 />
     </div>
   </header>
-
+  <br />
+  <br />
   <main>
-    <!-- <TheWelcome /> -->
+    <router-view></router-view>
   </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+<script>
+  export default {
+    computed: {
+      username() {
+        return this.$route.params.username
+      },
+    },
+    methods: {
+      goToDashboard() {
+        if (isAuthenticated) {
+          this.$router.push('/dashboard')
+        } else {
+          this.$router.push('/login')
+        }
+      },
+    },
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+</script>
