@@ -11,7 +11,6 @@
   }
 </style>
 
-
 <template>
   <header>
     <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
@@ -20,9 +19,9 @@
       <router-link to="/SignalRSmaple1">Signalr測試</router-link>
       <router-link to="/SignalRSmaple1">建立使用者</router-link>
       <router-link to="/Chatroom">聊天室</router-link>
+      <router-link v-if="!this.$store.state.auth.isLogin" to="/login">登入</router-link>
+      <router-link v-else to="/login">登出</router-link>
     </p>
-    <div class="wrapper">
-    </div>
   </header>
   <br />
   <br />
@@ -34,6 +33,11 @@
 
 <script>
   export default {
+    data(){
+      return {
+      }
+
+    },
     computed: {
       username() {
         return this.$route.params.username

@@ -1,4 +1,4 @@
-import './assets/main.css'
+// import './assets/main.css'
 
 import { createApp, nextTick } from 'vue'
 import App from './App.vue'
@@ -8,12 +8,15 @@ import Login from './components/Login.vue'
 
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import './assets/main.css'
-
 import Store from './store/index.js';
 import Vuex from 'vuex';
 
 import api from './apis'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import "bootstrap"
+
+// import cors from 'cors'
 
 const Home = { template: '<div>Home Test</div>' }
 
@@ -38,8 +41,8 @@ nextTick(()=>{
 })
 
 app.use(router)
-
-app.use(Vuex);
+app.use(Vuex)
 app.use(Store)
+// app.use(cors)
 
 app.mount('#app')

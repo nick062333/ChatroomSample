@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataClass", "DataClass\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter", "Adapter\Adapter.csproj", "{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{13441417-3416-467A-9B4F-3B487BBC12BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13441417-3416-467A-9B4F-3B487BBC12BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13441417-3416-467A-9B4F-3B487BBC12BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13441417-3416-467A-9B4F-3B487BBC12BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13441417-3416-467A-9B4F-3B487BBC12BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{1C4007C3-E06A-4E30-999C-75EE7DA55FA0} = {D9A67436-5C10-4ECA-B2DD-A247A240D1E3}
 		{3C6F93AA-7FCC-4463-9460-E43330159BE3} = {D9A67436-5C10-4ECA-B2DD-A247A240D1E3}
 		{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254} = {D9A67436-5C10-4ECA-B2DD-A247A240D1E3}
+		{13441417-3416-467A-9B4F-3B487BBC12BD} = {D9A67436-5C10-4ECA-B2DD-A247A240D1E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F44B62D-19C7-4AE2-B4CD-7F4CA93BA727}
