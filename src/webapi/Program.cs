@@ -2,6 +2,7 @@ using System.Text;
 using Adapter;
 using DataClass.Configs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using webapi;
@@ -11,7 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(hubOptions => {
+    hubOptions.AddFilter<HubFilter>();
+});
+
+builder.Services.AddSingleton<HubFilter>();
 
 builder.Services.AddDbContext<ChatroomDBContext>(options =>
      options.UseSqlServer(builder.Configuration.GetConnectionString("ChatroomDBContext")));
