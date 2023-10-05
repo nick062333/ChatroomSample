@@ -58,20 +58,23 @@ export default
         }
     },
     created(){
-        console.log('create');
+        console.log('create', this.$store, this.$store.state.auth.token );
 
-        var vm = this;
-
-        vm.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7057/notification")
+        this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7057/hub/notification", { 
+                accessTokenFactory: () => this.$store.state.auth.token,
+                withCredentials: true
+                // headers: {"groupId": "group1"}
+            })
+            //.withUrl("https://localhost:7057/notification")
             .build();
 
-            vm.hubConnection.start();
+            this.hubConnection.start();
 
-            vm.hubConnection.on("ReceiveMessage", (userName, message, sendDate)  => {
+            this.hubConnection.on("ReceiveMessage", (userName, message, sendDate)  => {
                 console.log('ReceiveMessage=', userName, message, sendDate);
                 
-                vm.messageLog.push({ userName, message, sendDate});
+                this.messageLog.push({ userName, message, sendDate});
 
         }   );
     },

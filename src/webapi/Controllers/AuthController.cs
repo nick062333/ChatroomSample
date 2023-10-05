@@ -29,6 +29,12 @@ namespace webapi.Controllers
             }
         }
 
+        [HttpGet("username")]
+        public ActionResult GetUseName()
+        {
+            return Ok(User.Identity?.Name);
+        }
+
 //         // 登入並取得 JWT Token
 // app.MapPost("/signin", (LoginViewModel login, JwtHelpers jwt) =>
 //     {
@@ -51,14 +57,6 @@ namespace webapi.Controllers
 //         return Results.Ok(user.Claims.Select(p => new { p.Type, p.Value }));
 //     })
 //     .WithName("Claims")
-//     .RequireAuthorization();
-
-// // 取得 JWT Token 中的使用者名稱
-// app.MapGet("/username", (ClaimsPrincipal user) =>
-//     {
-//         return Results.Ok(user.Identity?.Name);
-//     })
-//     .WithName("Username")
 //     .RequireAuthorization();
 
 // // 取得使用者是否擁有特定角色

@@ -1,12 +1,10 @@
+using System.Security.Claims;
 using System.Text;
 using Adapter;
 using DataClass.Configs;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using webapi;
 using webapi.Hubs;
@@ -14,9 +12,26 @@ using webapi.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR(hubOptions => {
-    // hubOptions.AddFilter<HubFilter>();
+    hubOptions.AddFilter<HubFilter>();
+});
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+            .WithOrigins("https://localhost:5173", "http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); 
+        });
 });
 
 builder.Services.AddSingleton<HubFilter>();
@@ -28,23 +43,26 @@ builder.Services.Configure<ConnectionSettings>(builder.Configuration.GetSection(
 
 builder.Services.AddSingleton<JwtHelpers>();
 
-builder.Services.AddSingleton<IUserIdProvider, JWTUserIdProvider>();
+// builder.Services.AddSingleton<IUserIdProvider, JWTUserIdProvider>();
 
 
-//Identity 伺服器 JWT 驗證 ()
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer(options =>
+
+// builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+// { 
+//     options.ClaimsIdentity.UserNameClaimType = "sub";
+//     options.ClaimsIdentity.RoleClaimType = "role";
+// });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
         // 當驗證失敗時，回應標頭會包含 WWW-Authenticate 標頭，這裡會顯示失敗的詳細錯誤原因
         options.IncludeErrorDetails = true; // 預設值為 true，有時會特別關閉
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // 透過這項宣告，就可以從 "sub" 取值並設定給 User.Identity.Name
-            NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-            // 透過這項宣告，就可以從 "roles" 取值，並可讓 [Authorize] 判斷角色
-            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+            NameClaimType = ClaimTypes.NameIdentifier,
+            RoleClaimType = ClaimTypes.Role,
 
             // 一般我們都會驗證 Issuer
             ValidateIssuer = true,
@@ -63,29 +81,25 @@ builder.Services
             // "1234567890123456" 應該從 IConfiguration 取得
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSettings:SignKey")))
         };
+
+        options.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    // SignalR 會將 Token 以參數名稱 access_token 的方式放在 URL 查詢參數裡
+                    var accessToken = context.Request.Query["access_token"];
+
+                    // 連線網址為 Hubs 相關路徑才檢查
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hub"))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
+            };
     });
-//     .AddIdentityServerJwt();
-// builder.Services.TryAddEnumerable(
-//     ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>());
-
-builder.Services.AddAuthorization();;
-
-builder.Services.AddControllers();
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy
-            .WithOrigins("https://localhost:5173", "http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); 
-        });
-});
+ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -98,19 +112,21 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapHub<NotificationHub>("/notification");
+// app.Use(async (context, next) =>
+// {
+//     var bearerToken = context.Request.Query["access_token"].ToString();
 
+//     if (!String.IsNullOrEmpty(bearerToken))
+//         context.Request.Headers.TryAdd("Authorization", "Bearer " + bearerToken);
+
+//     await next();
+// });
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-// app.UseRouting();
-app.MapControllers();
-
-
 app.UseCors(MyAllowSpecificOrigins);
-
-
+app.MapControllers();
+app.MapHub<NotificationHub>("/hub/notification");
 
 app.Run();
