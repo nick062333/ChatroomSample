@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "vueapp", "vueapp\vueapp.esproj", "{D1352E2A-859B-4D24-A5D0-D0EF7351F720}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "webapi", "webapi\webapi.csproj", "{1C4007C3-E06A-4E30-999C-75EE7DA55FA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{13441417-3416-467A-9B4F-3B487BBC12BD} = {13441417-3416-467A-9B4F-3B487BBC12BD}
+		{D1352E2A-859B-4D24-A5D0-D0EF7351F720} = {D1352E2A-859B-4D24-A5D0-D0EF7351F720}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{35D4EB50-22F1-4429-878A-03F27F4653C1}"
 EndProject
@@ -15,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataClass", "DataClass\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter", "Adapter\Adapter.csproj", "{CD4BE9EE-F77D-4B01-975F-DBD33FFB3254}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{13441417-3416-467A-9B4F-3B487BBC12BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataService", "DataService\DataService.csproj", "{13441417-3416-467A-9B4F-3B487BBC12BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
