@@ -1,9 +1,12 @@
 using System.Text;
 using Adapter;
 using DataClass.Configs;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using webapi;
 using webapi.Hubs;
@@ -13,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR(hubOptions => {
-    hubOptions.AddFilter<HubFilter>();
+    // hubOptions.AddFilter<HubFilter>();
 });
 
 builder.Services.AddSingleton<HubFilter>();
@@ -25,9 +28,13 @@ builder.Services.Configure<ConnectionSettings>(builder.Configuration.GetSection(
 
 builder.Services.AddSingleton<JwtHelpers>();
 
+builder.Services.AddSingleton<IUserIdProvider, JWTUserIdProvider>();
+
+
+//Identity 伺服器 JWT 驗證 ()
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+       .AddJwtBearer(options =>
     {
         // 當驗證失敗時，回應標頭會包含 WWW-Authenticate 標頭，這裡會顯示失敗的詳細錯誤原因
         options.IncludeErrorDetails = true; // 預設值為 true，有時會特別關閉
@@ -57,8 +64,11 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("JwtSettings:SignKey")))
         };
     });
+//     .AddIdentityServerJwt();
+// builder.Services.TryAddEnumerable(
+//     ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>());
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization();;
 
 builder.Services.AddControllers();
 
