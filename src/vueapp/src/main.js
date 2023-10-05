@@ -25,6 +25,7 @@ const routes = [
     { path: '/SignalRSmaple1', component: SignalRSmaple1 },
     { path: '/Chatroom', component: Chatroom },
     { path: '/login', component: Login },
+    { path: '/SignOut', component: null },
   ]
 
 const router = createRouter({

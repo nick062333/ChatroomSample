@@ -13,9 +13,8 @@
             this.$api.auth.login({ account : this.account, password : this.password })
             .then((response) =>{
                 console.log('login', response);
-
                 this.$store.dispatch('auth/setAuth',{ "token" : response.data, "isLogin": true });
-
+                alert('已登入');
                 this.$router.push("/");
 
             })
