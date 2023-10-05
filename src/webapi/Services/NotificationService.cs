@@ -6,14 +6,14 @@ namespace webapi.Services
 {
     public class NotificationService
     {
-            private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-    public NotificationService(IHubContext<NotificationHub> hubContext) =>
-        _hubContext = hubContext;
+        public NotificationService(IHubContext<NotificationHub> hubContext) =>
+            _hubContext = hubContext;
 
-    public Task SendNotificationAsync(NotificationRequest notification) =>
-        notification is not null
-            ? _hubContext.Clients.All.SendAsync("NotificationReceived", notification)
-            : Task.CompletedTask;
+        public Task SendNotificationAsync(NotificationRequest notification) =>
+            notification is not null
+                ? _hubContext.Clients.All.SendAsync("NotificationReceived", notification)
+                : Task.CompletedTask;
     }
 }
