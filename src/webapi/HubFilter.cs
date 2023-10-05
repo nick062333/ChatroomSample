@@ -5,18 +5,20 @@ namespace webapi
 {
     public class HubFilter : IHubFilter
     {
-        private readonly IHttpContextAccessor _httpContextAccessr;
-
-        public HubFilter(IHttpContextAccessor httpContextAccessr){
-            _httpContextAccessr = httpContextAccessr;
-        }
-
         public async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext
             , Func<HubInvocationContext, ValueTask<object>> next)
         {
             Console.WriteLine($"Calling hub method '{invocationContext.HubMethodName}'");
+
             try
             {
+                var httpContext = invocationContext.Context.GetHttpContext();
+                
+                if(!httpContext.Request.Query.Any(x => x.Key == "GroupName"))
+                {
+                    throw new Exception("group name is not null");
+                }
+
                 return await next(invocationContext);
             }
             catch (Exception ex)
@@ -30,7 +32,12 @@ namespace webapi
         public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
         {
             var httpContext = context.Context.GetHttpContext();
-            httpContext.Request.Headers.TryGetValue("Groupid", out var groupId);
+
+            // if( httpContext.Request.Headers.TryGetValue("Groupid", out var groupId))
+            //     context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
+
+            if( httpContext.Request.Query.TryGetValue("GroupName", out var groupId))
+                context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
 
             // _ = _httpContextAccessr.HttpContext.Request.Headers.TryGetValue("Groupid", out var groupId);
             Debug.WriteLine($"{context.Hub.Context.ConnectionId} onnected!");
