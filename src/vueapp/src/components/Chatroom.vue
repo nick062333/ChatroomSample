@@ -30,6 +30,7 @@
     <br>
     <div>
         <div>
+            <div>群組代碼:<input type="text" v-model="groupName" /></div>
             <div>姓名:<input type="text" v-model="name" /></div>
             <div>
                 訊息:<textarea v-model="tmpMessage"></textarea>
@@ -51,6 +52,7 @@ export default
         return {
             hubConnection: null,
             name:"",
+            groupName:"",
             tmpMessage:"123",
             messageLog:[{ userName:"小名", message: "a", sendDate:new Date().toJSON()}]
         }
@@ -79,6 +81,7 @@ export default
             this.hubConnection.invoke('send', 
                 { 
                     UserId: this.name, 
+                    GroupName: this.groupName,
                     Message: this.tmpMessage, 
                     SendDate: new Date().toJSON()
                 })
