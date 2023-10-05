@@ -30,7 +30,7 @@
     <br>
     <div>
         <div>
-            <div>群組代碼:<input type="text" v-model="groupName" /></div>
+            <div>群組代碼:<input type="text" v-bind:value="groupId" readonly  disabled /></div>
             <div>姓名:<input type="text" v-model="name" /></div>
             <div>
                 訊息:<textarea v-model="tmpMessage"></textarea>
@@ -52,7 +52,7 @@ export default
         return {
             hubConnection: null,
             name:"",
-            groupName:"",
+            groupId:"group01",
             tmpMessage:"123",
             messageLog:[{ userName:"小名", message: "a", sendDate:new Date().toJSON()}]
         }
@@ -61,10 +61,13 @@ export default
         console.log('create', this.$store, this.$store.state.auth.token );
 
         this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7057/hub/notification", { 
-                accessTokenFactory: () => this.$store.state.auth.token,
-                withCredentials: true
-                // headers: {"groupId": "group1"}
+            .withUrl(`https://localhost:7057/hub/notification?GroupName=${this.groupId}`, { 
+                accessTokenFactory: () => this.$store.state.auth.token
+                // withCredentials: true,
+                // headers: {
+                //     "groupId": this.groupId
+                // },
+                // transport: signalR.HttpTransportType.LongPolling 
             })
             //.withUrl("https://localhost:7057/notification")
             .build();
@@ -83,8 +86,8 @@ export default
         SendMessage(){
             this.hubConnection.invoke('send', 
                 { 
-                    UserId: this.name, 
-                    GroupName: this.groupName,
+                    // UserId: this.name, 
+                    // GroupName: this.groupId,
                     Message: this.tmpMessage, 
                     SendDate: new Date().toJSON()
                 })

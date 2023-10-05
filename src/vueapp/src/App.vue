@@ -16,8 +16,8 @@
     <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
     <p>
       <router-link to="/">Home</router-link>
-      <router-link to="/SignalRSmaple1">Signalr測試</router-link>
-      <router-link to="/SignalRSmaple1">建立使用者</router-link>
+      <!-- <router-link to="/SignalRSmaple1">Signalr測試</router-link>
+      <router-link to="/SignalRSmaple1">建立使用者</router-link> -->
       <router-link to="/Chatroom">聊天室</router-link>
       <router-link v-if="!this.$store.state.auth.isLogin" to="/login" >登入</router-link>
       <router-link v-else  to="/SignOut" custom v-solt="{ SignOut }"><a v-on:click="SignOut" href="#">登出</a></router-link>
