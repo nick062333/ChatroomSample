@@ -16,9 +16,13 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();
+
+// builder.Services.AddConnections();
+
+//https://github.com/MessagePack-CSharp/MessagePack-CSharp
 builder.Services.AddSignalR(hubOptions => {
     hubOptions.AddFilter<HubFilter>();
-});
+}).AddMessagePackProtocol();;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
