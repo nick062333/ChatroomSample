@@ -1,4 +1,4 @@
 namespace webapi.Models
 {
-    public record NotificationRequest(string UserId, string Message, DateTime SendDate);
+    public record NotificationRequest(string Message, DateTime SendDate);
 }
