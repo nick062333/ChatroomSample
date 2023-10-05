@@ -1,5 +1,6 @@
 ﻿using Adapter.DBModel;
 using Adapter.EntityTypeConfiguration;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Adapter

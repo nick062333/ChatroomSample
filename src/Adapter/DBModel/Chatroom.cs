@@ -8,6 +8,6 @@ namespace Adapter.DBModel
 
         public ChatroomType ChatroomType { get; set; }
 
-        public string ChatroomName { get; set; }
+        public string ChatroomName { get; set; } 
     }
 }
