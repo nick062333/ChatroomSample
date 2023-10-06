@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.11" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +19,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Registers\" />
   </ItemGroup>
   
 </Project>

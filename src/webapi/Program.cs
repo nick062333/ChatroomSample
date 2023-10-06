@@ -17,9 +17,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterHub();
 builder.Services.RegisterCors();
+builder.Services.RegisterServices();
 
-builder.Services.AddDbContext<ChatroomDBContext>(options =>
-     options.UseSqlServer());
+// builder.Services.AddLogging(loggingBuilder =>
+// {
+//     loggingBuilder.AddConsole(); // 選擇控制台作為日誌輸出
+// });
 
 builder.Services.RegisterChatroomDatabase(builder.Configuration.GetConnectionString("ChatroomDBContext")!);
 

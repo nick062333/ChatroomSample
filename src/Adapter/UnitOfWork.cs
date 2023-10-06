@@ -1,39 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
 
 namespace Adapter
 {
-    internal class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        public DbContext DbContext { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private readonly IDbConnection _connection;
+        private IDbTransaction _transaction;
+
+        public UnitOfWork(IDbConnection connection)
+        {
+            _connection = connection;
+        }
 
         public void BeginTransaction()
         {
-            throw new NotImplementedException();
+            if (_connection.State != ConnectionState.Open)
+            {
+                _connection.Open();
+            }
+
+            _transaction = _connection.BeginTransaction();
         }
 
         public void Commit()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            _transaction?.Commit();
+            _transaction = null;
         }
 
         public void Rollback()
         {
-            throw new NotImplementedException();
+            _transaction?.Rollback();
+            _transaction = null;
         }
 
-        public void SaveChanges()
+        public void Dispose()
         {
-            throw new NotImplementedException();
+            _transaction?.Dispose();
+            _connection?.Close();
         }
     }
 }
