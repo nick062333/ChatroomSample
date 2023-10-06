@@ -13,6 +13,9 @@ import "bootstrap"
 
 import router from './router/index.js';
 
+import moment from 'moment'
+
+
 // import cors from 'cors'
 
 // const routes = [
@@ -33,6 +36,7 @@ const app = createApp(App)
 nextTick(()=>{
   // Vue.prototype.$api = api; => vue2.x
   app.config.globalProperties.$api = api;
+  app.config.globalProperties.$moment = moment;
 })
 
 app.use(router)

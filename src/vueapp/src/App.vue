@@ -21,7 +21,6 @@
       <!-- <router-link to="/login" >登入</router-link> -->
       <router-link to="/SignOut" custom v-solt="{ SignOut }"><a v-on:click="SignOut" href="#">登出</a></router-link>
       登入者姓名:{{username}}
-      
     </p>
     </div>
     <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->

@@ -11,7 +11,17 @@ const auth = {
                 "isLogin": false 
             });
 
+            this.$store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
 
+            window.localStorage.setItem('userData', JSON.stringify({ 
+                  token:'',
+                  userName: '',
+                  isLogin: false, 
+              }));
+    
+            alert('已登出');
+            
+            this.$router.push("/");
         // return req('post', '/auth/signup', params);
     },
     login(params){

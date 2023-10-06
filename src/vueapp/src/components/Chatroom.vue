@@ -21,9 +21,9 @@
 <template>
     <div class="message_log_box">
         <p>對話框</p>
-        <div class="card" v-for="(item, index) in messageLog">
+        <div class="card" v-if="messageLog" v-for="(item, index) in messageLog">
             <div class="card-body" :style="{ 'text-align': (item.userName == this.$store.state.auth.userName ? 'right': 'left') }">
-                {{ item.userName }}: {{ item.message }}
+                <b>{{ item.userName }}</b>: {{ item.message }} <br> {{ $moment(item.sendDate).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
         </div>
         <!-- <div v-for="(item, index) in messageLog">使用者名稱:{{ item.userName }} 訊息:{{ item.message }}  發送時間:{{ item.sendDate }}</div> -->
@@ -47,9 +47,8 @@
 </template>
 
 <script>
-// import { ref } from 'vue'
 import * as signalR from '@microsoft/signalr';
-
+import moment from 'moment'
 export default 
 {
     data(){
@@ -57,10 +56,15 @@ export default
             hubConnection: null,
             name: null,
             groupId:"group01",
-            tmpMessage:"123",
-            messageLog:[{ userName:"小名", message: "a", sendDate:new Date().toJSON()}]
+            tmpMessage:"",
+            messageLog:[
+      
+            ]
         }
     },
+    computed:{
+
+    },  
     created(){
         console.log('create',this.$store.state.auth );
         this.hubConnection = new signalR.HubConnectionBuilder()
@@ -96,6 +100,10 @@ export default
                     .then(() =>
                     {
                         console.log('msg send');
+                    })
+                    .catch((error) => {
+                        console.log('send message error', this.$router);
+                        this.$router.push("/");
                     });
         }
     }
