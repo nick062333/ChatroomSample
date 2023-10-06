@@ -10,16 +10,35 @@
         Login()
         {
             console.log('login');
+
             this.$api.auth.login({ account : this.account, password : this.password })
             .then((response) =>{
                 console.log('login', response);
-                this.$store.dispatch('auth/setAuth',{ "token" : response.data, "isLogin": true });
+
+                let userData = { 
+                    "token" : response.data, 
+                    "userName": this.account, 
+                    "isLogin": true 
+                };
+
+                this.$store.dispatch('auth/setAuth', userData);
+
+                window.localStorage.setItem('userData', JSON.stringify(userData));
+
                 alert('已登入');
                 this.$router.push("/");
 
             })
             .catch((error) => {
-                console.log('login error', error);
+                this.$store.dispatch('auth/setAuth',);
+
+                window.localStorage.setItem('userData', JSON.stringify({ 
+                    token:'',
+                    userName: '',
+                    isLogin:false, 
+                }));
+
+                console.log('login error');
             })
         }
 
@@ -30,7 +49,7 @@
 <template>
     <form class="row g-3">
         <div class="mb-3 row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">帳號</label>
+            <label for="staticEmail" class="col-sm-2 col-form-label">使用者名稱</label>
             <div class="col-sm-10">
             <input type="text" class="form-control" v-model="account">
         </div>

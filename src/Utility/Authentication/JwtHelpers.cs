@@ -1,23 +1,24 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace webapi
+namespace Utility.Authentication
 {
     public class JwtHelpers
     {
-        private readonly IConfiguration Configuration;
+        private readonly IConfiguration _configuration;
 
         public JwtHelpers(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            _configuration = configuration;
         }
 
         public string GenerateToken(string userName, int expireMinutes = 30)
         {
-            var issuer = Configuration.GetValue<string>("JwtSettings:Issuer");
-            var signKey = Configuration.GetValue<string>("JwtSettings:SignKey");
+            var issuer = _configuration.GetValue<string>("JwtSettings:Issuer");
+            var signKey = _configuration.GetValue<string>("JwtSettings:SignKey");
 
             // 密鑰，用於簽名和驗證JWT令牌
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signKey));
@@ -50,10 +51,6 @@ namespace webapi
             // 使用JwtSecurityTokenHandler來獲取JWT令牌的字符串表示
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
-
-   
-
-
 
             //will版本
             // // TODO: You can define your "roles" to your Claims.

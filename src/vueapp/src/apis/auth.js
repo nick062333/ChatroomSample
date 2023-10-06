@@ -4,10 +4,16 @@
 import req from './https'
 
 const auth = {
-    // signUp(params){
-    //     // this.$store.dispatch('auth/setAuth',{ token : '', isLogin : false });
-    //     // return req('post', '/auth/signup', params);
-    // },
+    signUp(){
+        this.$store.dispatch('auth/setAuth',{ 
+                "token" : '', 
+                "userName": '', 
+                "isLogin": false 
+            });
+
+
+        // return req('post', '/auth/signup', params);
+    },
     login(params){
         return req('post', '/auth/login', params);
     }

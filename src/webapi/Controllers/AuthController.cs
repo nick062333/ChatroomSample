@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using webapi.Models;
+using Utility.Authentication;
+using webapi.Models.Auth;
 
 namespace webapi.Controllers
 {
@@ -9,7 +10,8 @@ namespace webapi.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private JwtHelpers _jwtHelper { get; }
+        private readonly JwtHelpers _jwtHelper;
+
         public AuthController(JwtHelpers jwt){
             _jwtHelper = jwt;
         }

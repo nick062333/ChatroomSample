@@ -3,6 +3,7 @@ export default{
     namespaced: true,
     state:{
         token: "",
+        userName: "",
         isLogin: false
     },
 
@@ -10,6 +11,7 @@ export default{
     mutations:{
         SET_AUTH(state, options){
             state.token = options.token;
+            state.userName= options.userName;
             state.isLogin = options.isLogin;
         }
     },
@@ -19,6 +21,7 @@ export default{
         setAuth(context, options){
             context.commit('SET_AUTH',{
                 token: options.token,
+                userName: options.userName, 
                 isLogin: options.isLogin
             })
         }

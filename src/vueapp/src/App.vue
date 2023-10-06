@@ -13,15 +13,22 @@
 
 <template>
   <header>
-    <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
-    <p>
-      <router-link to="/">Home</router-link>
-      <!-- <router-link to="/SignalRSmaple1">Signalr測試</router-link>
-      <router-link to="/SignalRSmaple1">建立使用者</router-link> -->
-      <router-link to="/Chatroom">聊天室</router-link>
-      <router-link v-if="!this.$store.state.auth.isLogin" to="/login" >登入</router-link>
-      <router-link v-else  to="/SignOut" custom v-solt="{ SignOut }"><a v-on:click="SignOut" href="#">登出</a></router-link>
+    <div class="fixed-top">
+      <p v-if="this.$store.state.auth.isLogin">
+      <!-- <router-link to="/">Home</router-link> -->
+      <!-- <router-link to="/SignalRSmaple1">建立使用者</router-link> -->
+      <router-link to="/">聊天室</router-link>
+      <!-- <router-link to="/login" >登入</router-link> -->
+      <router-link to="/SignOut" custom v-solt="{ SignOut }"><a v-on:click="SignOut" href="#">登出</a></router-link>
+      登入者姓名:{{username}}
+      
     </p>
+    </div>
+    <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" /> -->
+
+    <!-- <p v-else>
+      <router-link to="/login" >登入</router-link>
+    </p> -->
   </header>
   <br />
   <br />
@@ -39,14 +46,22 @@
 
     },
     computed: {
-      // username() {
-      //   return this.$route.params.username
-      // },
+      username() {
+        return this.$store.state.auth.userName
+      },
     },
     methods: {
       SignOut(){
-        this.$store.dispatch('auth/setAuth',{ token : '', isLogin : false });
+        this.$store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
+
+        window.localStorage.setItem('userData', JSON.stringify({ 
+              token:'',
+              userName: '',
+              isLogin: false, 
+          }));
+
         alert('已登出');
+        
         this.$router.push("/");
       }
       // goToDashboard() {

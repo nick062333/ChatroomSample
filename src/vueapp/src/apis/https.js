@@ -31,12 +31,15 @@ instance.interceptors.request.use(function (config) {
     const { response } = error;
 
     console.log('response error', error);
+    console.log('response error2', response);
 
     if(response){
         errorHandle(response.status, response.data.error);
     }
     else{
         //回傳一個以 reason 拒絕的 Promise 物件
+
+        alert('連線失敗，後台掛掉或沒網路')
         return Promise.reject(error);
     }
   });
@@ -44,9 +47,15 @@ instance.interceptors.request.use(function (config) {
 
 
 const errorHandle = (status, msg) => {
+
+    console.log('error status',status);
     switch(status){
         case 400:
-            alert('login fail');
+            alert('登入失敗');
+            break;
+        case 401:
+            alert('登入驗證已失效');
+            this.$router.push('/login')
             break;
         default:
             console.error('未知的status', status);

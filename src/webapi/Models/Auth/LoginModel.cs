@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace webapi.Models
+namespace webapi.Models.Auth
 {
 
     public class LoginModel{

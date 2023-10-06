@@ -5,10 +5,6 @@
     margin-right: 15px;
   }
 
-  div {
-
-  }
-
   .message_log_box{
     background-color: #FFD382;
     padding:10px;
@@ -25,17 +21,25 @@
 <template>
     <div class="message_log_box">
         <p>對話框</p>
-        <div v-for="(item, index) in messageLog">使用者名稱:{{ item.userName }} 訊息:{{ item.message }}  發送時間:{{ item.sendDate }}</div>
+        <div class="card" v-for="(item, index) in messageLog">
+            <div class="card-body" :style="{ 'text-align': (item.userName == this.$store.state.auth.userName ? 'right': 'left') }">
+                {{ item.userName }}: {{ item.message }}
+            </div>
+        </div>
+        <!-- <div v-for="(item, index) in messageLog">使用者名稱:{{ item.userName }} 訊息:{{ item.message }}  發送時間:{{ item.sendDate }}</div> -->
     </div>
     <br>
     <div>
         <div>
-            <div>群組代碼:<input type="text" v-bind:value="groupId" readonly  disabled /></div>
-            <div>姓名:<input type="text" v-model="name" /></div>
-            <div>
-                訊息:<textarea v-model="tmpMessage"></textarea>
-                <button @click="SendMessage">發送訊息</button>
+            <!-- <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping">群組代碼</span>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+            </div> -->
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">訊息</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="tmpMessage"></textarea>
             </div>
+            <button type="button" class="btn btn-primary" @click="SendMessage">發送</button>
         </div>
 
 
@@ -51,15 +55,14 @@ export default
     data(){
         return {
             hubConnection: null,
-            name:"",
+            name: null,
             groupId:"group01",
             tmpMessage:"123",
             messageLog:[{ userName:"小名", message: "a", sendDate:new Date().toJSON()}]
         }
     },
     created(){
-        console.log('create', this.$store, this.$store.state.auth.token );
-
+        console.log('create',this.$store.state.auth );
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(`https://localhost:7057/hub/notification?GroupName=${this.groupId}`, { 
                 accessTokenFactory: () => this.$store.state.auth.token
@@ -69,7 +72,6 @@ export default
                 // },
                 // transport: signalR.HttpTransportType.LongPolling 
             })
-            //.withUrl("https://localhost:7057/notification")
             .build();
 
             this.hubConnection.start();
@@ -98,24 +100,4 @@ export default
         }
     }
 }
-
-
-// import * as signalR from '@microsoft/signalr';
-// // const signalR = require("@microsoft/signalr")
-// let connection = new signalR.HubConnectionBuilder()
-//     .withUrl("https://localhost:7057/chat")
-//     .build();
-
-// connection.on("ReceiveMessage", data => {
-//     console.log('ReceiveMessage=', data);
-// });
-
-// connection.start()
-//     .then(() => {
-
-//         console.log('start');
-//         connection.invoke("NewSend", "Hello");
-
-//     });
-
 </script>
