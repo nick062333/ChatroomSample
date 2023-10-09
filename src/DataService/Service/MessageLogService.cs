@@ -1,12 +1,30 @@
-﻿using DataService.Models.Message;
+﻿using Adapter;
+using Adapter.DBModel;
+using AutoMapper;
+using DataService.Models.Message;
 
 namespace DataService.Service
 {
     public class MessageLogService : IMessageLogService
     {
-        public Task CreateMessageLogAsync(CreateMessageLogModel createMessageLogModel)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMessageLogAdapter _messageLogAdapter;
+        private readonly IMapper _mapper;
+        private readonly IMessageLogService _messageLogService;
+
+        public MessageLogService(IUnitOfWork unitOfWork, IMessageLogAdapter messageLogAdapter, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+            _messageLogAdapter = messageLogAdapter;
+            _mapper = mapper;
+        }
+
+
+        public async Task CreateMessageLogAsync(CreateMessageLogModel createMessageLogModel)
+        {
+            _unitOfWork.BeginTransaction();
+            await _messageLogAdapter.InsertMessageLog(_mapper.Map<MessageLog>(createMessageLogModel));
+            _unitOfWork.Commit();
         }
     }
 }

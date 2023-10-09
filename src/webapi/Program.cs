@@ -1,4 +1,3 @@
-using Adapter;
 using Adapter.Registers;
 using Microsoft.EntityFrameworkCore;
 using Utility.Registers;
@@ -19,10 +18,13 @@ builder.Services.RegisterHub();
 builder.Services.RegisterCors();
 builder.Services.RegisterServices();
 
-// builder.Services.AddLogging(loggingBuilder =>
-// {
-//     loggingBuilder.AddConsole(); // 選擇控制台作為日誌輸出
-// });
+// builder.Logging.ClearProviders();
+// builder.Logging.AddConsole();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole(); // 選擇控制台作為日誌輸出
+});
 
 builder.Services.RegisterChatroomDatabase(builder.Configuration.GetConnectionString("ChatroomDBContext")!);
 

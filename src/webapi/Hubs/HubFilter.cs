@@ -5,6 +5,13 @@ namespace webapi
 {
     public class HubFilter : IHubFilter
     {
+        private readonly ILogger<HubFilter> _logger;
+
+        public HubFilter(ILogger<HubFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext
             , Func<HubInvocationContext, ValueTask<object>> next)
         {
@@ -15,9 +22,7 @@ namespace webapi
                 var httpContext = invocationContext.Context.GetHttpContext();
                 
                 if(!httpContext.Request.Query.Any(x => x.Key == "GroupName"))
-                {
                     throw new Exception("group name is not null");
-                }
 
                 return await next(invocationContext);
             }

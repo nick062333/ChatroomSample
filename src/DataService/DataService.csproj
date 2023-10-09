@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
+    <ProjectReference Include="..\Adapter\Adapter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="*" />
   </ItemGroup>
 
 </Project>
