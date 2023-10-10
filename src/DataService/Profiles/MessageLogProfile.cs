@@ -11,7 +11,7 @@ namespace DataService.Profiles
             CreateMap<ReceiveMessageProcessRequest , MessageLog>()
                 .ForMember(x => x.ChatroomId, opt => opt.MapFrom(s => s.GroupName))
                 .ForMember(x => x.SendUserId, opt => opt.MapFrom(s => s.UserId))
-                .ForMember(x => x.Content, opt => opt.MapFrom(s => s.Message))
+                .ForMember(x => x.Message, opt => opt.MapFrom(s => s.Message))
                 .ForMember(x => x.SendTime, opt => opt.MapFrom(s => s.SendTime));
         }
  

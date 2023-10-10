@@ -15,7 +15,13 @@ namespace Adapter.Adapters
 
         public async Task InsertMessageLog(MessageLog messageLog)
         {
-            await _unitOfWork.Connection.ExecuteAsync("Sp_InsertMessageLog", messageLog, commandType: CommandType.StoredProcedure);
+            var param = new DynamicParameters();
+            param.Add("@ChatroomId", messageLog.ChatroomId, DbType.String);
+            param.Add("@SendUserId", messageLog.SendUserId, dbType: DbType.Int64);
+            param.Add("@Message", messageLog.Message, dbType: DbType.String);
+            param.Add("@SendTime", messageLog.SendTime, dbType: DbType.DateTime);
+
+            await _unitOfWork.Connection.ExecuteAsync("InsertMessage", param, _unitOfWork.Transaction, commandType: CommandType.StoredProcedure);
         }
     }
 }

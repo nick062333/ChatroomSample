@@ -21,11 +21,15 @@ namespace webapi.Hubs
         public async Task SendMessage(NotificationRequest notification)
         {
             var httpContext = Context!.GetHttpContext();
+            string groupId = httpContext.Request.Query["GroupName"].ToString();
+            string userId = Context.User!.Identity!.Name!;
 
-            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest()
-            {
-
-            });
+            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
+                    groupId,
+                    0, 
+                    notification.Message,
+                    notification.SendDate
+                ));
 
             await Clients
                 .Group(httpContext.Request.Query["GroupName"].ToString())

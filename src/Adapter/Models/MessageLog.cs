@@ -4,11 +4,11 @@
     {
         public long Id { get; set; }
 
-        public long ChatroomId { get; set; }
+        public string ChatroomId { get; set; }
         
         public int Status { get; set; }
 
-        public required string Content { get; set; }
+        public required string Message { get; set; }
 
         public long SendUserId { get; set; }
 
