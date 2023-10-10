@@ -436,3 +436,4 @@ src/DataClass/obj/Debug/net8.0/refint/DataClass.dll
 
 .vs/
 .vscode/
+/src/vueapp/obj/Debug/vueapp.esproj.FileListAbsolute.txt
