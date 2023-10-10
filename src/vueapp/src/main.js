@@ -6,14 +6,14 @@ import App from './App.vue'
 import Store from './store/index.js';
 import Vuex from 'vuex';
 
-import api from './apis'
+import api from './apis';
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import "bootstrap"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap";
 
 import router from './router/index.js';
 
-import moment from 'moment'
+import moment from 'moment';
 
 
 // import cors from 'cors'
