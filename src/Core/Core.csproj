@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
+    <ProjectReference Include="..\DataService\DataService.csproj" />
   </ItemGroup>
 
 </Project>

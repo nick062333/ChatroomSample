@@ -12,6 +12,8 @@ namespace Adapter
 
         public IDbConnection Connection => _connection;
 
+        public IDbTransaction Transaction => _transaction;
+
         public UnitOfWork(IDbConnection connection)
         {
             _connection = connection;

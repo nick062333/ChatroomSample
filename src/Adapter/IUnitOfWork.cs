@@ -6,6 +6,8 @@ namespace Adapter
     {
         IDbConnection Connection { get; }
 
+        IDbTransaction Transaction { get; }
+
         public void BeginTransaction();
         
         public void Commit();
