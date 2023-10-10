@@ -1,5 +1,5 @@
 ﻿
-using Core.Models.Chat;
+using DataClass.DTOs;
 
 namespace Core
 {

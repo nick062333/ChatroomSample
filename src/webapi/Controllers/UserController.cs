@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataService;
+using Microsoft.AspNetCore.Mvc;
+using webapi.ViewModels.Users;
 
 namespace webapi.Controllers
 {
@@ -6,12 +8,15 @@ namespace webapi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public UserController() { }
+        public UserController(IUserService userService) 
+        { 
 
+        }
 
-        //public Task<ActionResult> CreateAsync(UserModel user) 
-        //{ 
-            
-        //}
+        [HttpGet]
+        public Task<ActionResult> CreateAsync(UserViewModel user) 
+        { 
+            throw new NotSupportedException();
+        }
     }
 }

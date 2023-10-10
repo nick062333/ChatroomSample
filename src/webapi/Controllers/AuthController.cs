@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utility.Authentication;
-using webapi.Models.Auth;
+using webapi.ViewModels.Auth;
+
 
 namespace webapi.Controllers
 {
@@ -18,11 +19,11 @@ namespace webapi.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public ActionResult SignIn(LoginModel loginModel)
+        public ActionResult SignIn(LoginViewModel loginViewModel)
         {
-            if (ValidateUser(loginModel))
+            if (ValidateUser(loginViewModel))
             {
-                var token = _jwtHelper.GenerateToken(loginModel.Account);
+                var token = _jwtHelper.GenerateToken(loginViewModel.Account);
                 return Ok(token);
             }
             else
@@ -77,7 +78,7 @@ namespace webapi.Controllers
 //     .WithName("JwtId")
 //     .RequireAuthorization();
 
-        private bool ValidateUser(LoginModel loginoginModel)
+        private static bool ValidateUser(LoginViewModel loginViewModel)
         {
             return true;
         }

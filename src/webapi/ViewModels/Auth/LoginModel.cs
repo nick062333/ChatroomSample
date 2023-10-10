@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace webapi.Models.Auth
+namespace webapi.ViewModels.Auth
 {
 
-    public class LoginModel{
+    public class LoginViewModel{
 
         [JsonPropertyName("account")]
         public  string Account { get; set; } = string.Empty;

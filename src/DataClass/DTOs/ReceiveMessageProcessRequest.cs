@@ -1,4 +1,4 @@
-﻿namespace Core.Models.Chat
+﻿namespace DataClass.DTOs
 {
     public class ReceiveMessageProcessRequest
     {
@@ -20,6 +20,6 @@
         /// <summary>
         /// 訊息發送時間
         /// </summary>
-        public string SendDate { get; set; }
+        public DateTime SendTime { get; set; }
     }
 }

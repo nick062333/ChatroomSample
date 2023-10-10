@@ -1,9 +1,9 @@
-﻿using DataService.Models.Message;
+﻿using DataClass.DTOs;
 
 namespace DataService
 {
     public interface IMessageLogService
     {
-        public Task CreateMessageLogAsync(CreateMessageLogModel createMessageLogModel);
+        public Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
     }
 }

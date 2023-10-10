@@ -1,5 +1,5 @@
 using Core;
-using Core.Models.Chat;
+using DataClass.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using webapi.Models;

@@ -1,7 +1,7 @@
 ﻿using Adapter;
-using Adapter.DBModel;
+using Adapter.Models;
 using AutoMapper;
-using DataService.Models.Message;
+using DataClass.DTOs;
 
 namespace DataService.Service
 {
@@ -10,7 +10,6 @@ namespace DataService.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMessageLogAdapter _messageLogAdapter;
         private readonly IMapper _mapper;
-        private readonly IMessageLogService _messageLogService;
 
         public MessageLogService(IUnitOfWork unitOfWork, IMessageLogAdapter messageLogAdapter, IMapper mapper)
         {
@@ -20,10 +19,11 @@ namespace DataService.Service
         }
 
 
-        public async Task CreateMessageLogAsync(CreateMessageLogModel createMessageLogModel)
+        public async Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
         {
             _unitOfWork.BeginTransaction();
-            await _messageLogAdapter.InsertMessageLog(_mapper.Map<MessageLog>(createMessageLogModel));
+            var messageLog = _mapper.Map<MessageLog>(receiveMessageProcessRequest);
+            await _messageLogAdapter.InsertMessageLog(messageLog);
             _unitOfWork.Commit();
         }
     }
