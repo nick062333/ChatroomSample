@@ -1,4 +1,4 @@
-﻿namespace Adapter.DBModel
+﻿namespace Adapter.Models
 {
     public class ChatroomMember
     {

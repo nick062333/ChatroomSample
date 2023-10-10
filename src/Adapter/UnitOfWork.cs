@@ -5,7 +5,12 @@ namespace Adapter
     public class UnitOfWork : IUnitOfWork
     {
         private readonly IDbConnection _connection;
+        
         private IDbTransaction _transaction;
+
+        private bool _disposed = false;
+
+        public IDbConnection Connection => _connection;
 
         public UnitOfWork(IDbConnection connection)
         {
@@ -34,10 +39,28 @@ namespace Adapter
             _transaction = null;
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources (e.g., repositories)
+                    _transaction?.Dispose();
+                    _transaction = null;
+                    _connection?.Close();
+                }
+
+                // Dispose unmanaged resources here (if any)
+
+                _disposed = true;
+            }
+        }
+
         public void Dispose()
         {
-            _transaction?.Dispose();
-            _connection?.Close();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -1,4 +1,4 @@
-using Adapter.DBModel;
+using Adapter.Models;
 
 namespace Adapter
 {
