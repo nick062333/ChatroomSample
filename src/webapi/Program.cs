@@ -1,6 +1,5 @@
 using Adapter.Registers;
 using DataService.Registers;
-using Microsoft.EntityFrameworkCore;
 using Utility.Registers;
 using webapi.Hubs;
 using webapi.Registers;
@@ -19,7 +18,7 @@ builder.Services.RegisterHub();
 builder.Services.RegisterCors();
 builder.Services.RegisterServices();
 builder.Services.RegisterDataService();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // builder.Logging.ClearProviders();
 // builder.Logging.AddConsole();
