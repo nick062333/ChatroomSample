@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Message] (
+﻿CREATE TABLE [dbo].[MessageLog] (
     [Id]         BIGINT           IDENTITY (1, 1) NOT NULL,
     [ChatroomId] UNIQUEIDENTIFIER NOT NULL,
     [Status]     TINYINT          CONSTRAINT [DF_Message_Status] DEFAULT ((0)) NOT NULL,
