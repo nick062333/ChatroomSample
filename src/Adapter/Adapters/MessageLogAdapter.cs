@@ -27,7 +27,7 @@ namespace Adapter.Adapters
         public async Task InsertMessageLog(MessageLog messageLog)
         {
             var param = new DynamicParameters();
-            param.Add("@ChatroomId", messageLog.ChatroomId, DbType.String);
+            param.Add("@GroupId", messageLog.GroupId, DbType.String);
             param.Add("@SendUserId", messageLog.SendUserId, dbType: DbType.Int64);
             param.Add("@Message", messageLog.Message, dbType: DbType.String);
             param.Add("@SendTime", messageLog.SendTime, dbType: DbType.DateTime);

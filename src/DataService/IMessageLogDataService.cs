@@ -1,5 +1,5 @@
-﻿using Adapter.Models;
-using DataClass.DTOs;
+﻿using DataClass.DTOs;
+using DataClass.Models;
 
 namespace DataService
 {
