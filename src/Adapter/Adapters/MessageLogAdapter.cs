@@ -1,4 +1,5 @@
 using System.Data;
+using Adapter.Interfaces;
 using Adapter.Models;
 using Dapper;
 
@@ -21,7 +22,8 @@ namespace Adapter.Adapters
             param.Add("@Message", messageLog.Message, dbType: DbType.String);
             param.Add("@SendTime", messageLog.SendTime, dbType: DbType.DateTime);
 
-            await _unitOfWork.Connection.ExecuteAsync("InsertMessage", param, _unitOfWork.Transaction, commandType: CommandType.StoredProcedure);
+            //dbo.usp_MessageLog_Insert
+            await _unitOfWork.Connection.ExecuteAsync("usp_MessageLog_Insert", param, _unitOfWork.Transaction, commandType: CommandType.StoredProcedure);
         }
     }
 }

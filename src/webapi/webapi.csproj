@@ -8,16 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="logs\**" />
+    <Content Remove="logs\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <None Remove="logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="*" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="*" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="*" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="*" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="*" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="*" />
+    <PackageReference Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Adapter\Adapter.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />

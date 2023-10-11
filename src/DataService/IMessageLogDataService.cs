@@ -2,7 +2,7 @@
 
 namespace DataService
 {
-    public interface IMessageLogService
+    public interface IMessageLogDataService
     {
         public Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
     }

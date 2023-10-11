@@ -1,7 +1,7 @@
-import users from './users'
+import user from './user'
 
 const v1 = {
-    users
+    user
 }
 
 export default v1;

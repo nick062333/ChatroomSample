@@ -1,7 +1,5 @@
 ﻿using Core;
 using Core.Services;
-using DataService;
-using DataService.Service;
 
 namespace webapi.Registers
 {
@@ -10,8 +8,7 @@ namespace webapi.Registers
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IChatService, ChatService>();
-
-            services.AddScoped<IMessageLogService, MessageLogService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

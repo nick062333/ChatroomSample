@@ -15,7 +15,7 @@ namespace Utility.Authentication
             _configuration = configuration;
         }
 
-        public string GenerateToken(string userName, int expireMinutes = 30)
+        public string GenerateToken(long userId, string userName, int expireMinutes = 30)
         {
             var issuer = _configuration.GetValue<string>("JwtSettings:Issuer");
             var signKey = _configuration.GetValue<string>("JwtSettings:SignKey");
@@ -31,6 +31,7 @@ namespace Utility.Authentication
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, userName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Role, "Admin"),

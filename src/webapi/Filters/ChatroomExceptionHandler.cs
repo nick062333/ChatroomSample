@@ -1,3 +1,5 @@
+using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Utility;
@@ -15,14 +17,12 @@ namespace webapi.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            //TODO:後續要調整
             if (context.Exception is ChatroomException httpResponseException)
             {
-                context.Result = new ObjectResult(httpResponseException.Value)
-                {
-                    StatusCode = httpResponseException.StatusCode
-                };
-
+                context.Result = new OkObjectResult(httpResponseException);
                 context.ExceptionHandled = true;
+                context.Exception = null;
             }
         }
     }

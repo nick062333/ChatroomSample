@@ -1,3 +1,7 @@
+using System.Security.Claims;
+using Core;
+using DataClass.DTOs;
+using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Utility.Authentication;
@@ -12,28 +16,36 @@ namespace webapi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtHelpers _jwtHelper;
+        private readonly IUserService _userService;
 
-        public AuthController(JwtHelpers jwt){
+        public AuthController(JwtHelpers jwt, IUserService userService){
             _jwtHelper = jwt;
+            _userService = userService;
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public ActionResult SignIn(LoginViewModel loginViewModel)
+        public async Task<ActionResult> SignInAsync(LoginViewModel loginViewModel)
         {
-            if (ValidateUser(loginViewModel))
-            {
-                var token = _jwtHelper.GenerateToken(loginViewModel.Account);
-                return Ok(token);
-            }
-            else
-            {
+            var validateResult = await _userService.ValidateUserAsync(new ValidateUserRequest(loginViewModel.Account, loginViewModel.Password));
+
+            if (!validateResult.IsVaild)
                 return BadRequest();
-            }
+   
+            var token = _jwtHelper.GenerateToken(validateResult.UserId, validateResult.UserName);
+            return Ok(token);
         }
 
         [HttpGet("username")]
         public ActionResult GetUseName()
+        {
+            var identity = (ClaimsIdentity)User.Identity;
+            var userNameClaim = identity?.FindFirst(ClaimTypes.Name)?.Value ?? string.Empty;
+            return Ok(userNameClaim);
+        }
+
+        [HttpGet("userId")]
+        public ActionResult GetId()
         {
             return Ok(User.Identity?.Name);
         }
@@ -78,9 +90,5 @@ namespace webapi.Controllers
 //     .WithName("JwtId")
 //     .RequireAuthorization();
 
-        private static bool ValidateUser(LoginViewModel loginViewModel)
-        {
-            return true;
-        }
     }
 }

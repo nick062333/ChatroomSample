@@ -26,6 +26,10 @@ try
     
     builder.Services.AddControllers(options => {
         options.Filters.Add<ChatroomExceptionHandler>();
+    })
+    .AddJsonOptions(options =>
+    {
+   
     });
 
     builder.Services.AddHttpContextAccessor();
@@ -37,7 +41,7 @@ try
     builder.Services.RegisterServices();
     builder.Services.RegisterDataService();
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+    builder.Services.RegisterValidator();
     // builder.Logging.ClearProviders();
     // builder.Logging.AddConsole();
 
@@ -68,8 +72,15 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
+
     app.UseCors(CorsRegister.HubClienOriginsPolicyName);
     app.MapControllers();
+
+  
+
+
+  
+
     app.MapHub<NotificationHub>("/hub/notification");
 
     // app.Use(async (context, next) =>

@@ -5,13 +5,13 @@ namespace Utility
 {
     public class ChatroomException : Exception
     {
-        public ChatroomException(int statusCode, object? value = null) =>
-            (StatusCode, Value) = (statusCode, value);
+        public ChatroomException(int code, object? value = null) =>
+            (ErrorCode, Value) = (code, value);
 
-        public ChatroomException(ChatroomeExceptionCode statusCode, object? value = null) =>
-            (StatusCode, Value) = ((int)statusCode, statusCode.GetDisplayName());
+        public ChatroomException(ChatroomeExceptionCode errorCode, object? value = null) =>
+            (ErrorCode, Value) = ((int)errorCode, errorCode.GetDisplayName());
 
-        public int StatusCode { get; }
+        public int ErrorCode { get; }
 
         public object? Value { get; }
     }

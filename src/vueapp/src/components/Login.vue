@@ -15,6 +15,9 @@
             .then((response) =>{
                 console.log('login', response);
 
+                if(!response)
+                    alert('登入失敗，可能帳號密碼有誤');
+
                 let userData = { 
                     "token" : response.data, 
                     "userName": this.account, 
@@ -38,7 +41,7 @@
                     isLogin:false, 
                 }));
 
-                console.log('login error');
+                alert('登入失敗');
             })
         },
 
@@ -53,7 +56,7 @@
 <template>
     <form class="row g-3">
         <div class="mb-3 row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">使用者名稱</label>
+            <label for="staticEmail" class="col-sm-2 col-form-label">帳號</label>
             <div class="col-sm-10">
             <input type="text" class="form-control" v-model="account">
         </div>

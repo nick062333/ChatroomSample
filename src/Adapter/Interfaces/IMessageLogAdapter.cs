@@ -1,8 +1,8 @@
 using Adapter.Models;
 
-namespace Adapter
+namespace Adapter.Interfaces
 {
-    public interface IMessageLogAdapter 
+    public interface IMessageLogAdapter
     {
         public Task InsertMessageLog(MessageLog messageLog);
     }

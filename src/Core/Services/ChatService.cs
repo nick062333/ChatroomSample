@@ -6,9 +6,9 @@ namespace Core.Services
 {
     public class ChatService : IChatService
     {
-        private readonly IMessageLogService _messageLogService;
+        private readonly IMessageLogDataService _messageLogService;
 
-        public ChatService(IMessageLogService messageLogService)
+        public ChatService(IMessageLogDataService messageLogService)
         {
             _messageLogService = messageLogService;
         }

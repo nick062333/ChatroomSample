@@ -13,7 +13,7 @@ namespace DataClass
         {
         }
 
-        public ChatroomException(string message, ChatroomErrorCode chatroomErrorCode)
+        public ChatroomException(string message, ChatroomeExceptionCode chatroomErrorCode)
           : base(message)
             {
             }

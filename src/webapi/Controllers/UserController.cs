@@ -1,4 +1,5 @@
-﻿using DataService;
+﻿using Core;
+using DataClass.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Users;
 
@@ -8,15 +9,19 @@ namespace webapi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public UserController(IUserService userService) 
-        { 
+        private readonly IUserService _userService;
 
+        public UserController(IUserService userService) 
+        {
+            _userService = userService;
         }
 
-        [HttpGet]
-        public Task<ActionResult> CreateAsync(UserViewModel user) 
+        [HttpPost("register")]
+        // [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterAsync(UserViewModel user) 
         { 
-            throw new NotSupportedException();
+            await _userService.RegisterAsync(new RegisterRequest(user.UserName, user.Account, user.Password));
+            return Ok();
         }
     }
 }
