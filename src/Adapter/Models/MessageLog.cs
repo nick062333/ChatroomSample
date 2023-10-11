@@ -8,7 +8,7 @@
         
         public int Status { get; set; }
 
-        public required string Message { get; set; }
+        public string Message { get; set; }
 
         public long SendUserId { get; set; }
 

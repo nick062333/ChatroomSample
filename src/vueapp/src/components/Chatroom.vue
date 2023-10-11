@@ -55,7 +55,7 @@ export default
         return {
             hubConnection: null,
             name: null,
-            groupId:"46be0312-c43a-451d-8489-45f426bdba54)",
+            groupId:"46be0312-c43a-451d-8489-45f426bdba54",
             tmpMessage:"",
             messageLog:[
       

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
@@ -18,10 +17,9 @@ namespace webapi.Controllers
         }
 
         [HttpGet("insert_message")]
-        public async Task<ActionResult> InsertMessageAsync(long sendUserId, string message)
+        public async Task<ActionResult> InsertMessageAsync(string groupId, long sendUserId, string message)
         {
-            string groupName = Guid.NewGuid().ToString();
-            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(groupName, sendUserId, message, DateTime.Now));
+            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(groupId, sendUserId, message, DateTime.Now));
             
             return Ok();
         }
@@ -29,9 +27,8 @@ namespace webapi.Controllers
         [HttpGet("GetMessageLogList")]
         public async Task<ActionResult> GetMessageLogListAsync(string messageSendDate, int page, int pageSize)
         {
-            await _chatService.GetMessageLogListAsync(new GetMessageLogListRequest(messageSendDate, page, pageSize));
-
-            return Ok();
+            var messageLogs = await _chatService.GetMessageLogListAsync(new GetMessageLogListRequest(messageSendDate, page, pageSize));
+            return Ok(messageLogs);
         }
     }
 }

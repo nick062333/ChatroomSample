@@ -2,8 +2,11 @@
 using Adapter.Interfaces;
 using Adapter.Models;
 using AutoMapper;
+using DataClass.Configs;
 using DataClass.DTOs;
 using DataClass.Models;
+using Microsoft.Extensions.Options;
+using Utility;
 
 namespace DataService.Service
 {
@@ -12,18 +15,21 @@ namespace DataService.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMessageLogAdapter _messageLogAdapter;
         private readonly IMapper _mapper;
+        private readonly AesEncryptionSettings _aesEncryptionSettings;
 
-        public MessageLogDataService(IUnitOfWork unitOfWork, IMessageLogAdapter messageLogAdapter, IMapper mapper)
+        public MessageLogDataService(IUnitOfWork unitOfWork, IMessageLogAdapter messageLogAdapter, IMapper mapper, IOptions<AesEncryptionSettings> aesEncryptionSettings)
         {
             _unitOfWork = unitOfWork;
             _messageLogAdapter = messageLogAdapter;
             _mapper = mapper;
+            _aesEncryptionSettings = aesEncryptionSettings.Value;
         }
 
         public async Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
         {
             _unitOfWork.BeginTransaction();
             var messageLog = _mapper.Map<MessageLog>(receiveMessageProcessRequest);
+            messageLog.Message = AesEncryptionHelper.Encrypt(messageLog.Message, _aesEncryptionSettings.Key, _aesEncryptionSettings.IV);
             await _messageLogAdapter.InsertMessageLog(messageLog);
             _unitOfWork.Commit();
         }

@@ -1,5 +1,6 @@
 using Adapter.Registers;
 using Core.Registers;
+using DataClass.Configs;
 using Serilog;
 using Utility.Registers;
 using webapi.Filters;
@@ -15,6 +16,8 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     var configuration = builder.Configuration;
+
+    builder.Services.Configure<AesEncryptionSettings>(configuration.GetSection("AesEncryptionSettings"));
 
     builder.Host.UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)

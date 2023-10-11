@@ -23,6 +23,7 @@ namespace Core.Services
         public async Task<GetMessageLogListResponse> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest)
         {
             var messageLogs = await _messageLogService.GetMessageLogListAsync(getMessageLogListRequest);
+            
             return new GetMessageLogListResponse()
             {
                 MessageLogs = messageLogs
