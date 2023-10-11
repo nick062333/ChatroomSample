@@ -14,6 +14,16 @@ namespace Adapter.Adapters
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<IEnumerable<MessageLog>> GetMessageLogListAsync(string groupId, int page, int pageSize)
+        {
+            var param = new DynamicParameters();
+            param.Add("@GroupId", groupId, DbType.String);
+            param.Add("@PageNumber", page, dbType: DbType.Int64);
+            param.Add("@PageSize", pageSize, dbType: DbType.Int64);
+
+            return await _unitOfWork.Connection.QueryAsync<MessageLog>("usp_MessageLog_GetList", param, commandType: CommandType.StoredProcedure);
+        }
+
         public async Task InsertMessageLog(MessageLog messageLog)
         {
             var param = new DynamicParameters();

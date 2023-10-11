@@ -15,6 +15,7 @@ import router from './router/index.js';
 
 import moment from 'moment';
 
+import { v4 as uuidv4 } from 'uuid';
 
 // import cors from 'cors'
 
@@ -37,6 +38,7 @@ nextTick(()=>{
   // Vue.prototype.$api = api; => vue2.x
   app.config.globalProperties.$api = api;
   app.config.globalProperties.$moment = moment;
+  app.config.globalProperties.$uuid = uuidv4;
 })
 
 app.use(router)

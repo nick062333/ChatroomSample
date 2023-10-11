@@ -1,6 +1,6 @@
-﻿namespace Adapter.Models
+namespace DataClass.Models
 {
-    public class MessageLog
+    public class MessageLogModel
     {
         public long Id { get; set; }
 

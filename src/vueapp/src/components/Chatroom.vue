@@ -55,7 +55,7 @@ export default
         return {
             hubConnection: null,
             name: null,
-            groupId:"group01",
+            groupId:"46be0312-c43a-451d-8489-45f426bdba54)",
             tmpMessage:"",
             messageLog:[
       
@@ -67,6 +67,7 @@ export default
     },  
     created(){
         console.log('create',this.$store.state.auth );
+
         this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl(`https://localhost:7057/hub/notification?GroupName=${this.groupId}`, { 
                 accessTokenFactory: () => this.$store.state.auth.token
@@ -82,9 +83,7 @@ export default
 
             this.hubConnection.on("ReceiveMessage", (userName, message, sendDate)  => {
                 console.log('ReceiveMessage=', userName, message, sendDate);
-                
                 this.messageLog.push({ userName, message, sendDate});
-
         }   );
     },
     methods:{

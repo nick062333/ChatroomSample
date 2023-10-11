@@ -5,7 +5,7 @@
         /// <summary>
         /// 聊天室代碼
         /// </summary>
-        public required string ChatroomId { get; set; }
+        public required string GroupId { get; set; }
 
         /// <summary>
         /// 使用者id

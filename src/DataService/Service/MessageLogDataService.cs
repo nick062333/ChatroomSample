@@ -3,6 +3,7 @@ using Adapter.Interfaces;
 using Adapter.Models;
 using AutoMapper;
 using DataClass.DTOs;
+using DataClass.Models;
 
 namespace DataService.Service
 {
@@ -19,13 +20,22 @@ namespace DataService.Service
             _mapper = mapper;
         }
 
-
         public async Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
         {
             _unitOfWork.BeginTransaction();
             var messageLog = _mapper.Map<MessageLog>(receiveMessageProcessRequest);
             await _messageLogAdapter.InsertMessageLog(messageLog);
             _unitOfWork.Commit();
+        }
+
+        public async Task<List<MessageLogModel>> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest)
+        {
+            var messageLogs = await _messageLogAdapter.GetMessageLogListAsync(
+                getMessageLogListRequest.groupId, 
+                getMessageLogListRequest.page, 
+                getMessageLogListRequest.pageSize);
+
+            return _mapper.Map<List<MessageLogModel>>(messageLogs);
         }
     }
 }
