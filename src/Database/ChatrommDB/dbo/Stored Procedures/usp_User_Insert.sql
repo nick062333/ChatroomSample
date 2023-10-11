@@ -5,22 +5,20 @@
 -- ============================================= 
 
 CREATE PROCEDURE [dbo].[usp_User_Insert]
-    @ChatroomId uniqueidentifier,
-    @SendUserId bigint,
-    @Message VARCHAR(max),
-    @SendTime datetime
+    @Account varchar(20),
+    @Password datetime,
+    @UserName nvarchar(20),
+    @CreateTime datetime
 AS
 BEGIN
-    INSERT INTO [dbo].[Message]
-               ([ChatroomId]
-               ,[SendUserId]
-               ,[Status]
-               ,[Message]
-               ,[SendTime])
-         VALUES
-               (@ChatroomId
-               ,@SendUserId
-               ,1
-               ,@Message
-               ,@SendTime)
+	INSERT INTO [dbo].[User]
+           ([Account]
+		   ,[Password]
+           ,[UserName]
+           ,[CreateTime])
+     VALUES
+           (@Account
+           ,@Password
+           ,@UserName
+           ,@CreateTime)
 END;
