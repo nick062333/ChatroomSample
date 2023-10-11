@@ -20,7 +20,6 @@
     <ProjectReference Include="..\Adapter\Adapter.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
-    <ProjectReference Include="..\DataService\DataService.csproj" />
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 

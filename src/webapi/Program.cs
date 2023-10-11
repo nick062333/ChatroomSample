@@ -1,7 +1,8 @@
 using Adapter.Registers;
-using DataService.Registers;
+using Core.Registers;
 using Serilog;
 using Utility.Registers;
+using webapi.Filters;
 using webapi.Hubs;
 using webapi.Registers;
 
@@ -22,7 +23,11 @@ try
         );
 
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddControllers();
+    
+    builder.Services.AddControllers(options => {
+        options.Filters.Add<ChatroomExceptionHandler>();
+    });
+
     builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddSwaggerGen();
