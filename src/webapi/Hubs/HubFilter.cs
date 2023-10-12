@@ -41,7 +41,7 @@ namespace webapi
             // if( httpContext.Request.Headers.TryGetValue("Groupid", out var groupId))
             //     context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
 
-            if( httpContext.Request.Query.TryGetValue("GroupName", out var groupId))
+            if( httpContext.Request.Query.TryGetValue("GroupId", out var groupId))
                 context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
 
             // _ = _httpContextAccessr.HttpContext.Request.Headers.TryGetValue("Groupid", out var groupId);

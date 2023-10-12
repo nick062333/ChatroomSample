@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Core;
+using DataClass;
 using DataClass.DTOs;
 using Duende.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,7 @@ using webapi.ViewModels.Auth;
 namespace webapi.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly JwtHelpers _jwtHelper;
         private readonly IUserService _userService;
@@ -28,12 +27,8 @@ namespace webapi.Controllers
         public async Task<ActionResult> SignInAsync(LoginViewModel loginViewModel)
         {
             var validateResult = await _userService.ValidateUserAsync(new ValidateUserRequest(loginViewModel.Account, loginViewModel.Password));
-
-            if (!validateResult.IsVaild)
-                return BadRequest();
-   
             var token = _jwtHelper.GenerateToken(validateResult.UserId, validateResult.UserName);
-            return Ok(token);
+            return Ok(new { token, userName = validateResult.UserName });
         }
 
         [HttpGet("username")]

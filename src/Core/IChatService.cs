@@ -5,13 +5,6 @@ namespace Core
 {
     public interface IChatService
     {
-        // /// <summary>
-        // /// 取得群組內的訊息列表
-        // /// </summary>
-        // /// <param name="groupName">群組名稱</param>
-        // /// <returns></returns>
-        // public Task<List<ChatMessageResponse>> GetChatMessageList(string groupName);
-
         /// <summary>
         /// 取得訊息紀錄
         /// </summary>

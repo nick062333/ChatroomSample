@@ -1,6 +1,9 @@
+using System.Text.Json;
 using Adapter.Registers;
 using Core.Registers;
+using DataClass;
 using DataClass.Configs;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Utility.Registers;
 using webapi.Filters;
@@ -30,10 +33,23 @@ try
     builder.Services.AddControllers(options => {
         options.Filters.Add<ChatroomExceptionHandler>();
     })
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        //配置api行為
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => JsonSerializer.Deserialize<ValidationPropertyErrorObject>(e.ErrorMessage));
+            
+            return new OkObjectResult(new ResponseBase(errors));
+        };
+    })
     .AddJsonOptions(options =>
     {
    
     });
+
 
     builder.Services.AddHttpContextAccessor();
 
@@ -75,6 +91,7 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
+    app.UseMiddleware<ExceptionMiddleware>();
 
     app.UseCors(CorsRegister.HubClienOriginsPolicyName);
     app.MapControllers();

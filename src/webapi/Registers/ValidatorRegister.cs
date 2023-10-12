@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using webapi.Interceptors;
 using webapi.Validators;
 
 namespace webapi.Registers
@@ -10,6 +11,7 @@ namespace webapi.Registers
         {
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<UserViewModelValidator>();
+            services.AddTransient<IValidatorInterceptor, CustomValidatorErrorInterceptor>();
         } 
     }
 }

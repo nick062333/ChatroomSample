@@ -69,7 +69,7 @@ export default
         console.log('create',this.$store.state.auth );
 
         this.hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl(`https://localhost:7057/hub/notification?GroupName=${this.groupId}`, { 
+            .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
                 accessTokenFactory: () => this.$store.state.auth.token
                 // withCredentials: true,
                 // headers: {
@@ -91,8 +91,6 @@ export default
         SendMessage(){
             this.hubConnection.invoke('send', 
                 { 
-                    // UserId: this.name, 
-                    // GroupName: this.groupId,
                     Message: this.tmpMessage, 
                     SendDate: new Date().toJSON()
                 })

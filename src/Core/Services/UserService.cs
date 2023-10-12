@@ -25,9 +25,9 @@ namespace Core.Services
             var userData = await _userDataService.GetUserAsync(validateUserRequest.account);
 
             if(userData != null && CheckPassword(validateUserRequest.password, userData.Password))
-                return new ValidateUserResponse(true, userData.Id, userData.UserName);
+                return new ValidateUserResponse(userData.Id, userData.UserName);
             else
-                throw new ChatroomException(ChatroomeExceptionCode.LoginFail);
+                throw new ChatroomException(ChatroomStatusCode.LoginFail);
         }
 
         private static bool CheckPassword(string password, string dbPasswordSha256)

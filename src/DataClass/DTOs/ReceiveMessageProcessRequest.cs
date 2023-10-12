@@ -2,9 +2,9 @@
 {
     public class ReceiveMessageProcessRequest
     {
-        public ReceiveMessageProcessRequest(string groupName, long userId, string message, DateTime sendTime)
+        public ReceiveMessageProcessRequest(string groupId, long userId, string message, DateTime sendTime)
         {
-            GroupName = groupName;
+            GroupId = groupId;
             UserId = userId;
             Message = message;
             SendTime = sendTime;
@@ -13,7 +13,7 @@
         /// <summary>
         /// 群組代碼
         /// </summary>
-        public string GroupName { get; set; }
+        public string GroupId { get; set; }
 
         /// <summary>
         /// 使用者代碼

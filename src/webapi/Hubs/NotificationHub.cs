@@ -8,7 +8,7 @@ namespace webapi.Hubs
 {
     public class NotificationHub : Hub<INotificationClient>
     {
-        // private readonly ILogger<NotificationHub> _logger;
+        private readonly ILogger<NotificationHub> _logger;
 
         private readonly IChatService _chatService;
 
@@ -21,7 +21,10 @@ namespace webapi.Hubs
         public async Task SendMessage(NotificationRequest notification)
         {
             var httpContext = Context!.GetHttpContext();
-            string groupId = httpContext.Request.Query["GroupName"].ToString();
+            
+            string groupId = httpContext.Request.Query["GroupId"].ToString();
+            _logger.LogInformation("send notice groupId:{@GroupId} data:{@notification}",groupId, notification);
+
             string userId = Context.User!.Identity!.Name!;
 
             await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
@@ -32,7 +35,7 @@ namespace webapi.Hubs
                 ));
 
             await Clients
-                .Group(httpContext.Request.Query["GroupName"].ToString())
+                .Group(httpContext.Request.Query["GroupId"].ToString())
                 .ReceiveMessage(Context.User!.Identity!.Name!, notification.Message, DateTime.Now.AddHours(8));
         }
     }

@@ -15,12 +15,15 @@
             .then((response) =>{
                 console.log('login', response);
 
-                if(!response)
+                if(!response || !response.data || response.data.ChatroomStatusCode != 200)
+                {
                     alert('登入失敗，可能帳號密碼有誤');
+                    return;
+                }
 
                 let userData = { 
-                    "token" : response.data, 
-                    "userName": this.account, 
+                    "token" : response.data.Data.token, 
+                    "userName": response.data.Data.userName,     
                     "isLogin": true 
                 };
 
@@ -41,7 +44,7 @@
                     isLogin:false, 
                 }));
 
-                alert('登入失敗');
+                alert('登入失敗1');
             })
         },
 
