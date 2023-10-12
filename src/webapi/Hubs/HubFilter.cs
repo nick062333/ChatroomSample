@@ -1,5 +1,6 @@
-using System.Diagnostics;
+using DataClass.Enums;
 using Microsoft.AspNetCore.SignalR;
+using Utility;
 
 namespace webapi
 {
@@ -15,45 +16,60 @@ namespace webapi
         public async ValueTask<object> InvokeMethodAsync(HubInvocationContext invocationContext
             , Func<HubInvocationContext, ValueTask<object>> next)
         {
-            Console.WriteLine($"Calling hub method '{invocationContext.HubMethodName}'");
-
             try
             {
                 var httpContext = invocationContext.Context.GetHttpContext();
                 
-                if(!httpContext.Request.Query.Any(x => x.Key == "GroupName"))
-                    throw new Exception("group name is not null");
+                if(!httpContext.Request.Query.Any(x => x.Key == "GroupId"))
+                    throw new ChatroomException(ChatroomStatusCode.DataVerificationFailed, "group id is not null");
 
-                return await next(invocationContext);
+                return await next(invocationContext);  
             }
-            catch (Exception ex)
+            catch(ChatroomException ex)
             {
-                Console.WriteLine($"Exception calling '{invocationContext.HubMethodName}': {ex}");
+                _logger.LogError(ex, "ChatroomStatusCode:{@ChatroomStatusCode} StatusMessage:{@StatusMessage}", ex.ChatroomStatusCode, ex.StatusMessage);
                 throw;
             }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, " HubName:{@HubMethodName} ", invocationContext.HubMethodName);
+                throw;
+           }
         }
 
-        // Optional method
         public Task OnConnectedAsync(HubLifetimeContext context, Func<HubLifetimeContext, Task> next)
         {
-            var httpContext = context.Context.GetHttpContext();
+            try
+            {
+                var httpContext = context.Context.GetHttpContext();
 
-            // if( httpContext.Request.Headers.TryGetValue("Groupid", out var groupId))
-            //     context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
+                if(httpContext.Request.Query.TryGetValue("GroupId", out var groupId))
+                    context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
+                else
+                    throw new ChatroomException(ChatroomStatusCode.DataVerificationFailed, "group id is not null");
 
-            if( httpContext.Request.Query.TryGetValue("GroupId", out var groupId))
-                context.Hub.Groups.AddToGroupAsync(context.Context.ConnectionId, groupId.ToString());
+                _logger.LogInformation("{@ConnectionId} onnected!", context.Hub.Context.ConnectionId);
 
-            // _ = _httpContextAccessr.HttpContext.Request.Headers.TryGetValue("Groupid", out var groupId);
-            Debug.WriteLine($"{context.Hub.Context.ConnectionId} onnected!");
-            return next(context);
+                return next(context);
+            }
+            catch(ChatroomException ex)
+            {
+                _logger.LogError(ex, "ChatroomStatusCode:{@ChatroomStatusCode} StatusMessage:{@StatusMessage}", ex.ChatroomStatusCode, ex.StatusMessage);
+                throw;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, " HubName:{@ConnectionId} ", context.Context.ConnectionId);
+                throw;
+           }
         }
 
         // Optional method
         public Task OnDisconnectedAsync(
             HubLifetimeContext context, Exception exception, Func<HubLifetimeContext, Exception, Task> next)
         {
-            Debug.WriteLine($"{context.Hub.Context.ConnectionId} Disconnect!");
+            _logger.LogInformation("{@ConnectionId} Disconnect!", context.Hub.Context.ConnectionId);
+
             return next(context, exception);
         }
     }

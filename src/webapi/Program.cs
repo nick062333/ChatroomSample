@@ -29,8 +29,9 @@ try
         );
 
     builder.Services.AddEndpointsApiExplorer();
-    
-    builder.Services.AddControllers(options => {
+
+    _ = builder.Services.AddControllers(options =>
+    {
         options.Filters.Add<ChatroomExceptionHandler>();
     })
     .ConfigureApiBehaviorOptions(options =>
@@ -41,13 +42,13 @@ try
             var errors = context.ModelState.Values
                 .SelectMany(v => v.Errors)
                 .Select(e => JsonSerializer.Deserialize<ValidationPropertyErrorObject>(e.ErrorMessage));
-            
+
             return new OkObjectResult(new ResponseBase(errors));
         };
     })
     .AddJsonOptions(options =>
     {
-   
+        // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 
 

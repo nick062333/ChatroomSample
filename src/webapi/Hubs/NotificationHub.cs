@@ -2,14 +2,13 @@ using Core;
 using DataClass.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Utility;
 using webapi.Models;
 
 namespace webapi.Hubs
 {
     public class NotificationHub : Hub<INotificationClient>
     {
-        private readonly ILogger<NotificationHub> _logger;
-
         private readonly IChatService _chatService;
 
         public NotificationHub(IChatService chatService) {
@@ -21,22 +20,22 @@ namespace webapi.Hubs
         public async Task SendMessage(NotificationRequest notification)
         {
             var httpContext = Context!.GetHttpContext();
-            
-            string groupId = httpContext.Request.Query["GroupId"].ToString();
-            _logger.LogInformation("send notice groupId:{@GroupId} data:{@notification}",groupId, notification);
 
-            string userId = Context.User!.Identity!.Name!;
+            string groupId = httpContext.Request.Query["GroupId"].ToString();
+
+            if(!long.TryParse(Context.User!.Identity!.Name, out long userId))
+                throw new Exception($"user id not number! userId:{Context.User!.Identity!.Name ?? string.Empty}");
 
             await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
                     groupId,
-                    0, 
+                    userId, 
                     notification.Message,
                     notification.SendDate
                 ));
 
             await Clients
-                .Group(httpContext.Request.Query["GroupId"].ToString())
-                .ReceiveMessage(Context.User!.Identity!.Name!, notification.Message, DateTime.Now.AddHours(8));
+                .Group(groupId)
+                .ReceiveMessage(Context.User!.Identity!.Name!, notification.Message, TwDateTime.Now);
         }
     }
 }

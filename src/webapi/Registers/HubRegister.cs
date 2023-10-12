@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using webapi.Filters;
 
 namespace webapi.Registers
 {

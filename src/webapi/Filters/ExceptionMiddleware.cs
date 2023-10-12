@@ -22,7 +22,7 @@ namespace webapi.Filters
             }
             catch (ChatroomException ex)
             {
-                await context.Response.WriteJsonAsync(new ResponseBase(ex.ChatroomStatusCode, ex?.Value));
+                await context.Response.WriteJsonAsync(new ResponseBase(ex.ChatroomStatusCode, ex?.StatusMessage));
             }
             catch (Exception ex)
             {
