@@ -17,6 +17,11 @@ namespace Core.Services
 
         public async Task RegisterAsync(RegisterRequest registerRequest)
         {
+            var userData = await _userDataService.GetUserAsync(registerRequest.Account);
+
+            if(userData != null)
+                throw new ChatroomException(ChatroomStatusCode.RegisterFail, "帳號已存在");
+
             await _userDataService.AddUserAsync(registerRequest);
         }
 

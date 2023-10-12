@@ -1,4 +1,5 @@
 ﻿
+using Adapter.Models;
 using DataClass.DTOs;
 
 namespace Core

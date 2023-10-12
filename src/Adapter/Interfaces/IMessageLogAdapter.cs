@@ -4,7 +4,7 @@ namespace Adapter.Interfaces
 {
     public interface IMessageLogAdapter
     {
-        Task<IEnumerable<MessageLog>> GetMessageLogListAsync(string groupId, int page, int pageSize);
+        Task<IEnumerable<MessageLog>> GetMessageLogListAsync(Guid groupId, int startIndex, int pageSize);
 
         public Task InsertMessageLog(MessageLog messageLog);
     }

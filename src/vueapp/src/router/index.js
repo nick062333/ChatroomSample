@@ -1,6 +1,7 @@
 import Chatroom from '../components/Chatroom.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
+import store from '../store'
 
 import { createRouter, createWebHashHistory } from 'vue-router'
 

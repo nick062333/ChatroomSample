@@ -13,17 +13,19 @@
 
             this.$api.auth.login({ account : this.account, password : this.password })
             .then((response) =>{
-                console.log('login', response);
+                
+                let responseData = response.data;
 
-                if(!response || !response.data || response.data.chatroomStatusCode != 200)
+                if(!responseData || responseData.ChatroomStatusCode != 200)
                 {
                     alert('登入失敗，可能帳號密碼有誤');
                     return;
                 }
 
                 let userData = { 
-                    "token" : response.data.data.token, 
-                    "userName": response.data.data.userName,     
+                    "token" : responseData.Data.token, 
+                    "userName": responseData.Data.userName,     
+                    "userId" : responseData.Data.userId,
                     "isLogin": true 
                 };
 
@@ -41,6 +43,7 @@
                 window.localStorage.setItem('userData', JSON.stringify({ 
                     token:'',
                     userName: '',
+                    userId:'',
                     isLogin:false, 
                 }));
 

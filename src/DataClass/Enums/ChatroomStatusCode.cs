@@ -15,5 +15,8 @@ namespace DataClass.Enums
 
         [Display(Name = "登入失敗，帳號或密碼有誤")]
         LoginFail = 502,
+
+        [Display(Name = "使用者註冊失敗")]
+        RegisterFail = 503
     }
 }

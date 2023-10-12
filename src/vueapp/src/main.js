@@ -17,6 +17,23 @@ import moment from 'moment';
 
 import { v4 as uuidv4 } from 'uuid';
 
+import { createStore, set, get, entries, setMany  } from 'idb-keyval';
+
+import utility from './utility'
+
+// const messageDB = createStore('message', 'message_store');
+
+// get
+// set('key1', 'Lets Write Happy New Year~', messageDB);
+
+// setMany([{ }])
+
+// get
+// get('key1', messageDB).then((val) => console.log('get key1=',val));
+
+// // entries
+// entries(messageDB).then((entries) => console.log('messageDB entries', entries));
+
 // import cors from 'cors'
 
 // const routes = [
@@ -31,7 +48,14 @@ import { v4 as uuidv4 } from 'uuid';
 //     routes
 // })
 
-const app = createApp(App)
+const app = createApp(App,{
+  methods: {
+    LoginOff() {
+      console.log('LoginOff')
+    },
+  }
+
+})
 
 //必須使 next tick,會有載入順序問題, 導致綁定失敗
 nextTick(()=>{
@@ -44,6 +68,7 @@ nextTick(()=>{
 app.use(router)
 app.use(Vuex)
 app.use(Store)
+app.use(utility);
 // app.use(cors)
 
 app.mount('#app')

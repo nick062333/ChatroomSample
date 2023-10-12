@@ -38,8 +38,17 @@ namespace DataService.Service
         {
             var messageLogs = await _messageLogAdapter.GetMessageLogListAsync(
                 getMessageLogListRequest.groupId, 
-                getMessageLogListRequest.page, 
+                getMessageLogListRequest.startIndex, 
                 getMessageLogListRequest.pageSize);
+
+            if(messageLogs != null)
+                foreach(var item in messageLogs)
+                {
+                    item.Message = AesEncryptionHelper.Decrypt(
+                        item.Message, 
+                        _aesEncryptionSettings.Key, 
+                        _aesEncryptionSettings.IV);
+                }
 
             return _mapper.Map<List<MessageLogModel>>(messageLogs);
         }

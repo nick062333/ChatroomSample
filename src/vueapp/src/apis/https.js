@@ -18,6 +18,14 @@ instance.interceptors.request.use(function (config) {
     const token = store.state.auth.token;
     token && (config.headers.Authorization = 'Bearer ' + token);
 
+    if(store.state.auth.token && config.url != '/auth/check')
+    {
+        // CustomHttpClient('get', '/auth/check')
+        // .then((response) =>{
+        //     console.log('/auth/check', response);
+        // })
+    }
+        
     return config;
   }, function (error) {
     // 对请求错误做些什么
@@ -39,7 +47,7 @@ instance.interceptors.request.use(function (config) {
     else{
         //回傳一個以 reason 拒絕的 Promise 物件
 
-        alert('連線失敗，後台掛掉或沒網路')
+        // alert('連線失敗，後台掛掉或沒網路')
         return Promise.reject(error);
     }
   });
@@ -62,8 +70,7 @@ const errorHandle = (status, msg) => {
     }
 }
 
-
-export default function(method, url, data = null){
+function CustomHttpClient(method, url, data = null){
 
     console.log('http.js url', url, method, data);
 
@@ -83,3 +90,5 @@ export default function(method, url, data = null){
     console.error('未知的method', method);
     return false;
 }
+
+export default CustomHttpClient

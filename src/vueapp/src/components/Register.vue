@@ -15,19 +15,17 @@
                 password : this.password, 
                 userName: this.userName })
             .then((response) =>{
-                console.log('login', response);
+                let responseData = response.data;
+                console.log('login', responseData);
 
-                let userData = { 
-                    "token" : response.data, 
-                    "userId": this.account, 
-                    "userName": this.account, 
-                    "isLogin": true 
-                };
-
-
-                alert('註冊成功');
-                this.$router.push("/Login");
-
+                if(responseData && responseData.ChatroomStatusCode == 200)
+                {
+                    alert('註冊成功');
+                    this.$router.push("/Login");
+                }
+                else{
+                    alert(responseData.Description);
+                }
             })
             .catch((error) => {
                 console.log(error);

@@ -4,7 +4,9 @@ namespace DataClass
 {
     public sealed class ResponseBase
     {
-        public ResponseBase(){}
+        public ResponseBase(){
+
+        }
 
         public ResponseBase(ChatroomStatusCode chatroomStatusCode, string description){
             ChatroomStatusCode = chatroomStatusCode;
@@ -20,6 +22,18 @@ namespace DataClass
             ChatroomStatusCode = ChatroomStatusCode.Success;
             Description = string.Empty;
             Data = data;
+        }
+
+        public ResponseBase(string description, ChatroomStatusCode statusCode){
+            ChatroomStatusCode = statusCode;
+            Description = description;
+            Data = null;
+        }
+
+        public ResponseBase(ChatroomStatusCode statusCode){
+            ChatroomStatusCode = statusCode;
+            Description = string.Empty;
+            Data = null;
         }
 
         public ChatroomStatusCode ChatroomStatusCode { get; set; }

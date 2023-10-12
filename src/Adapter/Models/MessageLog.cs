@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
 
-        public string GroupId { get; set; }
+        public Guid GroupId { get; set; }
         
         public int Status { get; set; }
 
@@ -13,5 +13,7 @@
         public long SendUserId { get; set; }
 
         public DateTime SendTime { get; set; }
+
+        public string UserName { get; set; }
     }
 }

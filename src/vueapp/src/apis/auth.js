@@ -8,10 +8,11 @@ const auth = {
         this.$store.dispatch('auth/setAuth',{ 
                 "token" : '', 
                 "userName": '', 
+                "userId": '',
                 "isLogin": false 
             });
 
-            this.$store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
+            this.$store.dispatch('auth/setAuth',{ token : '', userName:'', userId:'', isLogin : false });
 
             window.localStorage.setItem('userData', JSON.stringify({ 
                   token:'',
@@ -26,6 +27,9 @@ const auth = {
     },
     login(params){
         return req('post', '/auth/login', params);
+    },
+    check(){
+        return req('get', '/auth/check');
     }
 }
 

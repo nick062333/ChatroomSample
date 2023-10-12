@@ -3,6 +3,7 @@ using Adapter.Registers;
 using Core.Registers;
 using DataClass;
 using DataClass.Configs;
+using DataClass.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Utility.Registers;
@@ -42,13 +43,18 @@ try
             var errors = context.ModelState.Values
                 .SelectMany(v => v.Errors)
                 .Select(e => JsonSerializer.Deserialize<ValidationPropertyErrorObject>(e.ErrorMessage));
+            
+            var message = string.Empty;
 
-            return new OkObjectResult(new ResponseBase(errors));
+            if(errors.Any())
+                message = string.Join("\n", errors.Select(x => $"{x.ErrorMessage}").ToArray());
+
+            return new OkObjectResult(new ResponseBase(message, ChatroomStatusCode.DataVerificationFailed));
         };
     })
     .AddJsonOptions(options =>
     {
-        // options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
 

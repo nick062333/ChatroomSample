@@ -28,7 +28,7 @@ namespace webapi.Controllers
         {
             var validateResult = await _userService.ValidateUserAsync(new ValidateUserRequest(loginViewModel.Account, loginViewModel.Password));
             var token = _jwtHelper.GenerateToken(validateResult.UserId, validateResult.UserName);
-            return Ok(new { token, userName = validateResult.UserName });
+            return Ok(new { token, userName = validateResult.UserName, userId = validateResult.UserId });
         }
 
         [HttpGet("username")]
@@ -43,6 +43,13 @@ namespace webapi.Controllers
         public ActionResult GetId()
         {
             return Ok(User.Identity?.Name);
+        }
+
+        [HttpGet("check")]
+        [AllowAnonymous]
+        public ActionResult CheckAuthenticated()
+        {
+            return Ok(User?.Identity?.IsAuthenticated ?? false);
         }
 
 //         // 登入並取得 JWT Token
