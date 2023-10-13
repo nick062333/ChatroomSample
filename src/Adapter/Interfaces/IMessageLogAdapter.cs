@@ -8,6 +8,10 @@ namespace Adapter.Interfaces
 
         Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId);
 
-        public Task InsertMessageLog(MessageLog messageLog);
+        Task InsertMessageLogAsync(MessageLog messageLog);
+
+        Task<IEnumerable<MessageLog>> GetMessageLogListByIdRangeAsync(Guid groupId, int startId, int pageNumber, int pageSize);
+
+        Task<int> GetMessageLogListByIdRangeCountAsync(Guid groupId, int startId);
     }
 }

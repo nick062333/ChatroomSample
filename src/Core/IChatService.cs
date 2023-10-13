@@ -26,5 +26,13 @@ namespace Core
         /// <param name="receiveMessageProcessRequest"></param>
         /// <returns></returns>
         public Task ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
+
+        /// <summary>
+        /// 取得Id範圍內的訊息
+        /// </summary>
+        /// <param name="groupId">群組代碼</param>
+        /// <param name="startId">Id起始值</param>
+        /// <returns></returns>
+        public Task<GetMessageLogListByIdRangeRequest> GetMessageLogListByIdRangeAsync(Guid groupId, int startId);
     }
 }

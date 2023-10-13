@@ -1,3 +1,6 @@
+using DataClass.Configs;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -5,12 +8,27 @@ namespace Utility
 {
     public class AesEncryptionHelper
     {
-        public static string Encrypt(string plainText, string key, string iv)
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public AesEncryptionHelper(IServiceScopeFactory scopeFactory) 
+        {
+            _scopeFactory = scopeFactory;
+        }
+
+        protected virtual AesEncryptionSettings GetAesEncryptionSettings() 
+        {
+            using var scope = _scopeFactory.CreateScope();
+            var aesEncryptionSettings = scope.ServiceProvider.GetRequiredService<IOptions<AesEncryptionSettings>>();
+            return aesEncryptionSettings.Value;
+        }
+
+        public string Encrypt(string plainText)
         {
             using Aes aesAlg = Aes.Create();
 
-            aesAlg.Key = Encoding.UTF8.GetBytes(key);
-            aesAlg.IV = Encoding.UTF8.GetBytes(iv);
+            var aesEncryptionSettings = GetAesEncryptionSettings();
+            aesAlg.Key = Encoding.UTF8.GetBytes(aesEncryptionSettings.Key);
+            aesAlg.IV = Encoding.UTF8.GetBytes(aesEncryptionSettings.IV);
 
             ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
@@ -26,12 +44,13 @@ namespace Utility
             return Convert.ToBase64String(msEncrypt.ToArray());
         }
 
-        public static string Decrypt(string cipherText, string key, string iv)
+        public string Decrypt(string cipherText)
         {
             using Aes aesAlg = Aes.Create();
 
-            aesAlg.Key = Encoding.UTF8.GetBytes(key);
-            aesAlg.IV = Encoding.UTF8.GetBytes(iv);
+            var aesEncryptionSettings = GetAesEncryptionSettings();
+            aesAlg.Key = Encoding.UTF8.GetBytes(aesEncryptionSettings.Key);
+            aesAlg.IV = Encoding.UTF8.GetBytes(aesEncryptionSettings.IV);
 
             ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 

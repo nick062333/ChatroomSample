@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using Adapter.Models;
+using AutoMapper;
 using DataClass.DTOs;
 using DataService;
+using Microsoft.VisualBasic;
 
 namespace Core.Services
 {
@@ -20,6 +22,16 @@ namespace Core.Services
             var messageLogs = await _messageLogService.GetMessageLogListAsync(getMessageLogListRequest);
             
             return new GetMessageLogListResponse()
+            {
+                MessageLogs = messageLogs
+            };
+        }
+
+        public async Task<GetMessageLogListByIdRangeRequest> GetMessageLogListByIdRangeAsync(Guid groupId, int startId)
+        {
+            var messageLogs = await _messageLogService.GetMessageLogListByIdRangeAsync(groupId, startId);
+
+            return new GetMessageLogListByIdRangeRequest()
             {
                 MessageLogs = messageLogs
             };

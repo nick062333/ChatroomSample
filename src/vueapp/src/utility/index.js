@@ -14,6 +14,10 @@ const utility = {
     
         alert('已登出');
         $router.push("/Login");
+    },
+
+    IsArrayNotNullAndNotEmpty(arr) {
+        return arr !== null && arr.length > 0;
     }
 }
 

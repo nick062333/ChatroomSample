@@ -21,7 +21,7 @@
 <template>
     <div class="message_log_box">
         <p>
-            <button class="btn btn-dark" v-on:click="LoadMessage" :disabled="!isLoadMessage">{{ loadMessageBtnName }}</button>
+            <button class="btn btn-dark" v-on:click="GetMessageLogList" :disabled="!isLoadMessage">{{ loadMessageBtnName }}</button>
         </p>
         <div class="card" v-if="messageLog" v-for="(item, index) in messageLog">
             <div class="card-body" :style="{ 'text-align': (item.SendUserId == this.$store.state.auth.userId ? 'right': 'left') }">
@@ -60,7 +60,7 @@ export default
         return {
             isLoadMessage:false,
             loadMessageBtnName:"載入歷史訊息(20筆)",
-            startIndex:0,
+            messageLogCount:0,
             totalCount:0,
             pageSize:20,
             hubConnection: null,
@@ -75,91 +75,15 @@ export default
     watch: {
         messageLog:{
             handler(newValue) {
-                this.startIndex = (!newValue || newValue.length <= 1 ) ? 0 : newValue.length - 1;
-                console.log('startIndex',this.startIndex);
-
-                set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
-                .then((val) => {
-                    console.log('set group messaeg db', val);
-                })
+                this.SetMessageLogBtnInfo();
             },
             deep: true
         }
     },
     created(){
-        var vm = this;
-
-        this.totalCount = 0;
-
-        this.$api.v1.message.getMessageLogListTotalCount({ groupId : this.groupId })
-            .then((response) => {
-                console.log('getMessageLogListTotalCount', response);
-                this.totalCount = response.data.Data.TotalCount -1;
-                
-                if(this.startIndex < this.totalCount -1)
-                    this.isLoadMessage = true;
-            });
-
-        this.groupMessageDB = createStore('messageDB', this.groupId);
-
-        get(this.groupId, this.groupMessageDB)
-            .then((val) => {
-                console.log('groupMessageDB', val);
-                if(val) {
-                    vm.messageLog = JSON.parse(val);
-
-                    console.log('messageLog',vm.messageLog);
-                }
-            })
-
-        this.hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
-            accessTokenFactory: () => this.$store.state.auth.token
-            // withCredentials: true,
-            // headers: {
-            //     "groupId": this.groupId
-            // },
-            // transport: signalR.HttpTransportType.LongPolling 
-        })
-        .withAutomaticReconnect({
-            nextRetryDelayInMilliseconds: retryContext => {
-
-                this.$api.auth.check()
-                .then((response) => {
-                    if(response.data == true)
-                    {
-                        if (retryContext.elapsedMilliseconds < 30000) {
-                            // If we've been reconnecting for less than 60 seconds so far,
-                            // wait between 0 and 10 seconds before the next reconnect attempt.
-                            return Math.random() * 10000;
-                        } else {
-                            // If we've been reconnecting for more than 60 seconds so far, stop reconnecting.
-                            return null;
-                        }
-                    }
-                    else
-                        return null;
-                })
-            }
-        })
-        .build();
-
-        this.hubConnection.start();
-
-        this.hubConnection.on("ReceiveMessage", (userName, message, sendTime, status)  => {
-            this.messageLog.push({ 
-                GroupId: this.groupId, 
-                Status: status,
-                UserName: userName, 
-                SendUserId: this.$store.state.auth.userId,
-                Message: message, 
-                SendTime: sendTime
-            });
-
-            set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
-                .then(() => console.log('set 儲存成功'));
-
-        });
+        this.SetMessageTotalCount();
+        this.InitMessageLogData();
+        this.InitSignalR();
     },
     methods:{
         SendMessage(){
@@ -185,35 +109,151 @@ export default
                     }
                 })
         },
-        LoadMessage()
+        GetMessageLogList()
         {
-            this.startIndex += 1;
-
-            console.log('startIndex', this.startIndex);
+            console.log('GetMessageLogList',this.messageLogCount)
             this.$api.v1.message.getMessageLogList({ 
                     groupId : this.groupId, 
-                    startIndex : this.startIndex, 
+                    startIndex : this.messageLogCount <= 0 ? 0 : this.messageLogCount - 1, 
                     pageSize : this.pageSize 
                 })
                 .then((response) => {
                     let responseData = response.data;
                     console.log('LoadMessage', responseData);
 
-                    if(responseData && responseData.ChatroomStatusCode == 200)
+                    if(responseData && responseData.ChatroomStatusCode == 200 && responseData.Data.MessageLogs)
                     {
-                        if(responseData.Data.MessageLogs.length == 0)
-                        {
-                            this.isLoadMessage = false;
-                            this.loadMessageBtnName = "訊息載入完畢";
-                        }
-                        else{
-                            responseData.Data.MessageLogs.forEach(element => {
-                                this.messageLog.unshift(element);
-                            });
-                        }
+                        responseData.Data.MessageLogs.forEach(element => {
+                            this.messageLog.unshift(element);
+                        });
+
+                        this.SetMessageCache();
                     }
                 
+                    this.SetMessageLogBtnInfo();
                 })
+        },
+        SetMessageTotalCount()
+        {
+            this.totalCount = 0;
+
+            this.$api.v1.message.getMessageLogListTotalCount({ groupId : this.groupId })
+                .then((response) => {
+                    console.log('getMessageLogListTotalCount', response);
+                    this.totalCount = response.data.Data.TotalCount;
+                    this.SetMessageLogBtnInfo();
+        
+                });
+        },
+
+        SetMessageLogBtnInfo()
+        {
+            if(this.messageLogCount < this.totalCount)
+            {
+                this.isLoadMessage = true;
+                this.loadMessageBtnName = "載入歷史訊息(20筆)";
+            }
+            else{
+                this.isLoadMessage = false;
+                this.loadMessageBtnName = "訊息載入完畢";
+            }
+        }, 
+
+        InitMessageLogData(){
+            this.groupMessageDB = createStore('messageDB', this.groupId);
+
+            get(this.groupId, this.groupMessageDB)
+                .then((val) => {
+                    console.log('groupMessageDB', val);
+                    if(val) {
+                        this.messageLog = JSON.parse(val);
+
+                        const maxIdItem = this.messageLog 
+                            .reduce((max, item) => (item.Id > max.Id ? item : max), this.messageLog[0]);
+
+                        console.log('maxIdItem', maxIdItem);
+
+                        console.log('messageLog',this.messageLog);
+
+                        this.$api.v1.message.getMessageLogListByIdRange({ 
+                            groupId: this.groupId, 
+                            startId: maxIdItem.Id 
+                        })
+                        .then((response) => {
+                            console.log('getMessageLogListByIdRange', response);
+
+                            if(response.data.ChatroomStatusCode == 200 && this.$utility.IsArrayNotNullAndNotEmpty(response.data.Data))
+                            {
+                                console.log('add', response.data.Data);
+                                this.messageLog.push(response.data.Data);
+
+                                this.SetMessageCache();
+                            }    
+                        })
+                    }
+                })
+        },
+
+        InitSignalR()
+        {
+            this.hubConnection = new signalR.HubConnectionBuilder()
+                .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
+                    accessTokenFactory: () => this.$store.state.auth.token
+                    // withCredentials: true,
+                    // headers: {
+                    //     "groupId": this.groupId
+                    // },
+                    // transport: signalR.HttpTransportType.LongPolling 
+                })
+                .withAutomaticReconnect({
+                    nextRetryDelayInMilliseconds: retryContext => {
+
+                        this.$api.auth.check()
+                        .then((response) => {
+                            if(response.data == true)
+                            {
+                                if (retryContext.elapsedMilliseconds < 10000) {
+                                    // If we've been reconnecting for less than 60 seconds so far,
+                                    // wait between 0 and 10 seconds before the next reconnect attempt.
+                                    return Math.random() * 10000;
+                                } else {
+                                    // If we've been reconnecting for more than 60 seconds so far, stop reconnecting.
+                                    return null;
+                                }
+                            }
+                            else
+                                return null;
+                        })
+                    }
+                })
+                .build();
+
+                this.hubConnection.start();
+
+                this.hubConnection.on("ReceiveMessage", (userName, message, sendTime, status)  => {
+                    this.messageLog.push({ 
+                        GroupId: this.groupId, 
+                        Status: status,
+                        UserName: userName, 
+                        SendUserId: this.$store.state.auth.userId,
+                        Message: message, 
+                        SendTime: sendTime
+                    });
+
+                    // set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
+                    //     .then(() => console.log('set 儲存成功'));
+
+                });
+        },
+
+        SetMessageCache()
+        {
+            this.messageLogCount = this.messageLog.length;
+
+            set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
+                .then(() => {
+                        console.log('set 儲存成功');
+                });
         }
     }
 }

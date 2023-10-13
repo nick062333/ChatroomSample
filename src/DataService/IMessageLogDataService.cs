@@ -11,5 +11,7 @@ namespace DataService
         public Task<List<MessageLogModel>> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest);
 
         public Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId);
+
+        public Task<List<MessageLogModel>> GetMessageLogListByIdRangeAsync(Guid groupId, int startId);
     }
 }

@@ -7,6 +7,10 @@ const message = {
 
     getMessageLogListTotalCount(params){
         return request('get','/message/get_message_log_list_total_count', params)
+    },
+
+    getMessageLogListByIdRange(params){
+        return request('get','/message/get_message_log_list_by_id_range', params)
     }
 }
 

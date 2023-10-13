@@ -1,6 +1,5 @@
 ﻿using Core;
 using DataClass.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Message;
 
@@ -40,6 +39,13 @@ namespace webapi.Controllers
                 getMessageLogListViewModel.StartIndex, 
                 getMessageLogListViewModel.PageSize));
 
+            return Ok(messageLogs);
+        }
+
+        [HttpGet("get_message_log_list_by_id_range")]
+        public async Task<ActionResult> GetMessageLogListByIdRangeAsync(Guid guid, int startId)
+        {
+            var messageLogs = await _chatService.GetMessageLogListByIdRangeAsync(guid, startId);
             return Ok(messageLogs);
         }
     }
