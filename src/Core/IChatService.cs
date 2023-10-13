@@ -7,6 +7,13 @@ namespace Core
     public interface IChatService
     {
         /// <summary>
+        /// 取得訊息紀錄列表總筆數
+        /// </summary>
+        /// <param name="getMessageLogTotalCountRequest"></param>
+        /// <returns></returns>
+        public Task<GetMessageLogTotalCountResponse> GetMessageLogTotalCountAsync(GetMessageLogTotalCountRequest getMessageLogTotalCountRequest);
+
+        /// <summary>
         /// 取得訊息紀錄
         /// </summary>
         /// <param name="getMessageLogListRequest"></param>

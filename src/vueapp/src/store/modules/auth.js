@@ -4,6 +4,7 @@ export default{
     state:{
         token: "",
         userName: "",
+        userId:"",
         isLogin: false
     },
 
@@ -13,6 +14,7 @@ export default{
             state.token = options.token;
             state.userName= options.userName;
             state.isLogin = options.isLogin;
+            state.userId = options.userId;
         }
     },
     //Action 提交的是 mutation，而不是直接变更状态
@@ -22,7 +24,8 @@ export default{
             context.commit('SET_AUTH',{
                 token: options.token,
                 userName: options.userName, 
-                isLogin: options.isLogin
+                isLogin: options.isLogin,
+                userId: options.userId
             })
         }
     }

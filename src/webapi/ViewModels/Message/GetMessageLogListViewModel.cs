@@ -7,9 +7,9 @@ namespace webapi.ViewModels.Message
         [JsonPropertyName("groupId")]
         public Guid GroupId { get; set; }
 
-        [JsonPropertyName("page")]
+        [JsonPropertyName("startIndex")]
 
-        public int Page { get; set; } 
+        public int StartIndex { get; set; } 
 
         [JsonPropertyName("pageSize")]
         public int PageSize { get; set; } 

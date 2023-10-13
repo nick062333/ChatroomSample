@@ -6,6 +6,7 @@ using DataClass.Configs;
 using DataClass.DTOs;
 using DataClass.Models;
 using Microsoft.Extensions.Options;
+using System.Text.RegularExpressions;
 using Utility;
 
 namespace DataService.Service
@@ -37,9 +38,9 @@ namespace DataService.Service
         public async Task<List<MessageLogModel>> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest)
         {
             var messageLogs = await _messageLogAdapter.GetMessageLogListAsync(
-                getMessageLogListRequest.groupId, 
-                getMessageLogListRequest.startIndex, 
-                getMessageLogListRequest.pageSize);
+                getMessageLogListRequest.GroupId, 
+                getMessageLogListRequest.StartIndex, 
+                getMessageLogListRequest.PageSize);
 
             if(messageLogs != null)
                 foreach(var item in messageLogs)
@@ -51,6 +52,12 @@ namespace DataService.Service
                 }
 
             return _mapper.Map<List<MessageLogModel>>(messageLogs);
+        }
+
+        public async Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId)
+        {
+            var totalCount = await _messageLogAdapter.GetMessageLogTotalCountByGroupIdAsync(groupId);
+            return totalCount;
         }
     }
 }

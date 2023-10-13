@@ -25,12 +25,19 @@ namespace webapi.Controllers
             return Ok();
         }
 
+        [HttpGet("get_message_log_list_total_count")]
+        public async Task<ActionResult> GetMessageLogTotalCountAsync(Guid groupId)
+        {
+            var result = await _chatService.GetMessageLogTotalCountAsync(new GetMessageLogTotalCountRequest(groupId));
+            return Ok(result);
+        }
+
         [HttpPost("get_message_log_list")]
         public async Task<ActionResult> GetMessageLogListAsync(GetMessageLogListViewModel getMessageLogListViewModel)
         {
             var messageLogs = await _chatService.GetMessageLogListAsync(new GetMessageLogListRequest(
                 getMessageLogListViewModel.GroupId, 
-                getMessageLogListViewModel.Page, 
+                getMessageLogListViewModel.StartIndex, 
                 getMessageLogListViewModel.PageSize));
 
             return Ok(messageLogs);

@@ -80,9 +80,13 @@ function CustomHttpClient(method, url, data = null){
         case 'post':
             return instance.post(url, data);
         case 'get':
-        return instance.get(url, data);
+        return instance.get(url, {
+            params: data
+          });
         case 'delete':
-            return instance.delete(url, data);
+            return instance.delete(url, {
+                params: data
+              });
         case 'put':
             return instance.put(url, data);
     }

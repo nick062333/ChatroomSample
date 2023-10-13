@@ -9,9 +9,11 @@ namespace webapi.Controllers
     [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
+        [NonAction]
         public new OkObjectResult Ok() 
             => base.Ok(new ResponseBase(ChatroomStatusCode.Success));
 
+        [NonAction]
         public override OkObjectResult Ok([ActionResultObjectValue] object? value) 
             => base.Ok(new ResponseBase(value));
     }

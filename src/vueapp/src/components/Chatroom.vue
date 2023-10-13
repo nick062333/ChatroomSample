@@ -21,14 +21,13 @@
 <template>
     <div class="message_log_box">
         <p>
-            對話框<button v-on:click="LoadMessage">載入歷史訊息(20筆)</button>
+            <button class="btn btn-dark" v-on:click="LoadMessage" :disabled="!isLoadMessage">{{ loadMessageBtnName }}</button>
         </p>
         <div class="card" v-if="messageLog" v-for="(item, index) in messageLog">
             <div class="card-body" :style="{ 'text-align': (item.SendUserId == this.$store.state.auth.userId ? 'right': 'left') }">
-                <b>{{ item.UserName }}</b>: {{ item.Message }} <br> {{ $moment(item.SendDate).format('YYYY-MM-DD HH:mm:ss') }}
+                <b>{{ item.Id }}. {{ item.UserName }}</b>: {{ item.Message }} <br> {{  $moment(item.SendTime).format('YYYY-MM-DD HH:mm:ss') }}
             </div>
         </div>
-        <!-- <div v-for="(item, index) in messageLog">使用者名稱:{{ item.userName }} 訊息:{{ item.message }}  發送時間:{{ item.sendDate }}</div> -->
     </div>
     <br>
     <div>
@@ -51,7 +50,7 @@
 
 <script>
 import * as signalR from '@microsoft/signalr';
-import { createStore, set, get, entries, setMany  } from 'idb-keyval';
+import { createStore, set, get } from 'idb-keyval';
 
 
 
@@ -59,7 +58,10 @@ export default
 {
     data(){
         return {
+            isLoadMessage:false,
+            loadMessageBtnName:"載入歷史訊息(20筆)",
             startIndex:0,
+            totalCount:0,
             pageSize:20,
             hubConnection: null,
             name: null,
@@ -71,19 +73,32 @@ export default
         }
     },
     watch: {
-        // 每当 question 改变时，这个函数就会执行
         messageLog:{
-            handler(newValue, oldValue) {
-            // 注意：在嵌套的变更中，
-            // 只要没有替换对象本身，
-            // 那么这里的 `newValue` 和 `oldValue` 相同
-            this.startIndex = (!newValue || newValue.length <= 1 ) ? 0 : newValue.length - 1;
-            console.log('startIndex',this.startIndex);
+            handler(newValue) {
+                this.startIndex = (!newValue || newValue.length <= 1 ) ? 0 : newValue.length - 1;
+                console.log('startIndex',this.startIndex);
+
+                set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
+                .then((val) => {
+                    console.log('set group messaeg db', val);
+                })
             },
             deep: true
         }
     },
     created(){
+        var vm = this;
+
+        this.totalCount = 0;
+
+        this.$api.v1.message.getMessageLogListTotalCount({ groupId : this.groupId })
+            .then((response) => {
+                console.log('getMessageLogListTotalCount', response);
+                this.totalCount = response.data.Data.TotalCount -1;
+                
+                if(this.startIndex < this.totalCount -1)
+                    this.isLoadMessage = true;
+            });
 
         this.groupMessageDB = createStore('messageDB', this.groupId);
 
@@ -91,7 +106,9 @@ export default
             .then((val) => {
                 console.log('groupMessageDB', val);
                 if(val) {
-                    this.messageLog = JSON.parse(val);
+                    vm.messageLog = JSON.parse(val);
+
+                    console.log('messageLog',vm.messageLog);
                 }
             })
 
@@ -129,14 +146,14 @@ export default
 
         this.hubConnection.start();
 
-        this.hubConnection.on("ReceiveMessage", (userName, message, sendDate, status)  => {
+        this.hubConnection.on("ReceiveMessage", (userName, message, sendTime, status)  => {
             this.messageLog.push({ 
                 GroupId: this.groupId, 
                 Status: status,
                 UserName: userName, 
                 SendUserId: this.$store.state.auth.userId,
                 Message: message, 
-                SendDate: sendDate
+                SendTime: sendTime
             });
 
             set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
@@ -153,7 +170,7 @@ export default
                         this.hubConnection.invoke('send', 
                         { 
                             Message: this.tmpMessage, 
-                            SendDate: new Date().toJSON()
+                            SendTime: new Date().toJSON()
                         })
                         .then(() =>{
                             console.log('msg send');
@@ -170,12 +187,13 @@ export default
         },
         LoadMessage()
         {
-            let vm = this;
-            vm.page += 1;
-            vm.$api.v1.message.getMessageLogList({ 
-                    groupId : vm.groupId, 
-                    page : vm.page, 
-                    pageSize : vm.pageSize 
+            this.startIndex += 1;
+
+            console.log('startIndex', this.startIndex);
+            this.$api.v1.message.getMessageLogList({ 
+                    groupId : this.groupId, 
+                    startIndex : this.startIndex, 
+                    pageSize : this.pageSize 
                 })
                 .then((response) => {
                     let responseData = response.data;
@@ -183,9 +201,16 @@ export default
 
                     if(responseData && responseData.ChatroomStatusCode == 200)
                     {
-                        responseData.Data.MessageLogs.forEach(element => {
-                            vm.messageLog.unshift(element);
-                        });
+                        if(responseData.Data.MessageLogs.length == 0)
+                        {
+                            this.isLoadMessage = false;
+                            this.loadMessageBtnName = "訊息載入完畢";
+                        }
+                        else{
+                            responseData.Data.MessageLogs.forEach(element => {
+                                this.messageLog.unshift(element);
+                            });
+                        }
                     }
                 
                 })

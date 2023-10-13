@@ -1,5 +1,6 @@
 ﻿using DataClass.DTOs;
 using DataClass.Models;
+using System;
 
 namespace DataService
 {
@@ -8,5 +9,7 @@ namespace DataService
         public Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
 
         public Task<List<MessageLogModel>> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest);
+
+        public Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId);
     }
 }

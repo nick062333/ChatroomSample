@@ -17,36 +17,7 @@ import moment from 'moment';
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { createStore, set, get, entries, setMany  } from 'idb-keyval';
-
 import utility from './utility'
-
-// const messageDB = createStore('message', 'message_store');
-
-// get
-// set('key1', 'Lets Write Happy New Year~', messageDB);
-
-// setMany([{ }])
-
-// get
-// get('key1', messageDB).then((val) => console.log('get key1=',val));
-
-// // entries
-// entries(messageDB).then((entries) => console.log('messageDB entries', entries));
-
-// import cors from 'cors'
-
-// const routes = [
-//     { path: '/', component: Home },
-//     { path: '/Chatroom', component: Chatroom },
-//     { path: '/login', component: Login },
-//     { path: '/SignOut', component: null },
-//   ]
-
-// const router = createRouter({
-//     history: createWebHashHistory(),
-//     routes
-// })
 
 const app = createApp(App,{
   methods: {

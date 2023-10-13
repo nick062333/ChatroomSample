@@ -42,7 +42,7 @@ try
         {
             var errors = context.ModelState.Values
                 .SelectMany(v => v.Errors)
-                .Select(e => JsonSerializer.Deserialize<ValidationPropertyErrorObject>(e.ErrorMessage));
+                .Select(e =>  JsonSerializer.Deserialize<ValidationPropertyErrorObject>(e.ErrorMessage));
             
             var message = string.Empty;
 

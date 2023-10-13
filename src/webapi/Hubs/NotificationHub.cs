@@ -33,7 +33,7 @@ namespace webapi.Hubs
                     groupId,
                     userId, 
                     notification.Message,
-                    notification.SendDate
+                    notification.SendTime
                 ));
 
             var identity = (ClaimsIdentity)Context.User.Identity;

@@ -15,11 +15,6 @@ namespace Core.Services
             _messageLogService = messageLogService;
         }
 
-        public Task<List<ChatMessageResponse>> GetChatMessageList(string groupName)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<GetMessageLogListResponse> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest)
         {
             var messageLogs = await _messageLogService.GetMessageLogListAsync(getMessageLogListRequest);
@@ -27,6 +22,14 @@ namespace Core.Services
             return new GetMessageLogListResponse()
             {
                 MessageLogs = messageLogs
+            };
+        }
+
+        public async Task<GetMessageLogTotalCountResponse> GetMessageLogTotalCountAsync(GetMessageLogTotalCountRequest getMessageLogTotalCountRequest)
+        {
+            return new GetMessageLogTotalCountResponse()
+            {
+                TotalCount = await _messageLogService.GetMessageLogTotalCountByGroupIdAsync(getMessageLogTotalCountRequest.GroupId)
             };
         }
 

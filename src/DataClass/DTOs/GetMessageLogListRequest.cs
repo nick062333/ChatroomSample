@@ -8,7 +8,7 @@ namespace DataClass.DTOs
     /// <param name="pageSize">每頁筆數</param>
     /// <returns></returns>
     public record GetMessageLogListRequest(
-        Guid groupId,
-        int startIndex, 
-        int pageSize);
+        Guid GroupId,
+        int StartIndex, 
+        int PageSize);
 }

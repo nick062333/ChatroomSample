@@ -2,7 +2,6 @@ using System.Data;
 using Adapter.Interfaces;
 using Adapter.Models;
 using Dapper;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Adapter.Adapters
 {
@@ -23,6 +22,14 @@ namespace Adapter.Adapters
             param.Add("@PageSize", pageSize, dbType: DbType.Int64);
 
             return await _unitOfWork.Connection.QueryAsync<MessageLog>("usp_MessageLog_GetList", param, commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId)
+        {
+            var param = new DynamicParameters();
+            param.Add("@GroupId", groupId, DbType.Guid);
+
+            return await _unitOfWork.Connection.QueryFirstAsync<int>("usp_MessageLog_GroupTotalCount_Get", param, commandType: CommandType.StoredProcedure);
         }
 
         public async Task InsertMessageLog(MessageLog messageLog)
