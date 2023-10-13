@@ -134,6 +134,7 @@ export default
                 GroupId: this.groupId, 
                 Status: status,
                 UserName: userName, 
+                SendUserId: this.$store.state.auth.userId,
                 Message: message, 
                 SendDate: sendDate
             });

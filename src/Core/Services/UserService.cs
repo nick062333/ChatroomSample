@@ -1,7 +1,9 @@
 using DataClass.DTOs;
 using DataClass.Enums;
+using DataClass.Models;
 using DataService;
 using Utility;
+using Utility.Authentication;
 using Utility.Cryptography;
 
 namespace Core.Services
@@ -9,9 +11,11 @@ namespace Core.Services
     public class UserService : IUserService
     {
         private readonly IUserDataService _userDataService;
+        private readonly JwtHelpers _jwtHelper;
 
-        public UserService(IUserDataService userDataService)
+        public UserService(IUserDataService userDataService, JwtHelpers jwtHelper)
         {
+            _jwtHelper = jwtHelper;
             _userDataService = userDataService;
         }
 
@@ -29,16 +33,19 @@ namespace Core.Services
         {
             var userData = await _userDataService.GetUserAsync(validateUserRequest.account);
 
-            if(userData != null && CheckPassword(validateUserRequest.password, userData.Password))
-                return new ValidateUserResponse(userData.Id, userData.UserName);
+            if(userData != null && CheckUserData(validateUserRequest, userData))
+            {
+                var token = _jwtHelper.GenerateToken(userData.Id, userData.UserName);
+                return new ValidateUserResponse(token, userData.Id, userData.UserName);
+            }
             else
                 throw new ChatroomException(ChatroomStatusCode.LoginFail);
         }
 
-        private static bool CheckPassword(string password, string dbPasswordSha256)
+        private static bool CheckUserData(ValidateUserRequest validateUserRequest, UserModel userData)
         {
-            var passwordSha256 = Sha256Helper.Encrypt(password);
-            return passwordSha256 == dbPasswordSha256;
+            var passwordSha256 = Sha256Helper.Encrypt(validateUserRequest.password);
+            return userData.Password == passwordSha256 && userData.Account == validateUserRequest.account;
         }
     }
 }
