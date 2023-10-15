@@ -5,12 +5,18 @@ namespace DataClass.Models
         /// <summary>
         /// 聊天室代碼
         /// </summary>
-        public required string ChatroomId { get; set; }
+        public Guid ChatroomId { get; set; }
 
         /// <summary>
         /// 使用者id
         /// </summary>
-        public required string UserId { get; set; }
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// 使用者名稱
+        /// </summary>
+        /// <value></value>
+        public string UserName { get; set; }
 
         /// <summary>
         /// 最後登入時間

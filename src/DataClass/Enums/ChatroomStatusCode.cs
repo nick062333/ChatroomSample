@@ -7,6 +7,9 @@ namespace DataClass.Enums
         [Display(Name = "成功")]
         Success = 200,
 
+        [Display(Name = "授權失效")]
+        JWTInvalid = 401,
+
         [Display(Name = "伺服器異常")]
         ServiceError = 500,
 
