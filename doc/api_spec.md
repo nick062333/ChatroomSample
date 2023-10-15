@@ -2,36 +2,37 @@
 
 # API Spec
 
-
-## 目錄
+## 一、目錄
 <!-- TOC -->
 
 - [API Spec](#api-spec)
-    - [目錄](#%E7%9B%AE%E9%8C%84)
-    - [版本異動紀錄](#%E7%89%88%E6%9C%AC%E7%95%B0%E5%8B%95%E7%B4%80%E9%8C%84)
-    - [使用者建立](#%E4%BD%BF%E7%94%A8%E8%80%85%E5%BB%BA%E7%AB%8B)
-        - [API Name:](#api-name)
-    - [訊息傳送](#%E8%A8%8A%E6%81%AF%E5%82%B3%E9%80%81)
+  - [一、目錄](#一目錄)
+  - [二、版本異動紀錄](#二版本異動紀錄)
+  - [三、使用者](#三使用者)
+    - [3-1. 登入](#3-1-登入)
+      - [Request body](#request-body)
+      - [Response body](#response-body)
+    - [3-2. 驗證使用者Token](#3-2-驗證使用者token)
+    - [3-3. 使用者列表](#3-3-使用者列表)
+  - [四、 聊天室](#四-聊天室)
+    - [4.1. 建立聊天室](#41-建立聊天室)
+    - [4-2. 取得訊息列表](#4-2-取得訊息列表)
 
 <!-- /TOC -->
 
-## 版本異動紀錄
+## 二、版本異動紀錄
 
-|-----------|---------|
-| 2023/10/03|| 初版   |
-|--------|---------|
+|異動時間| 異動說明   |
+|--|--|
+| 2023/10/15 | ...|
 
-## 1.使用者建立
+## 三、使用者
 
-## 2.訊息傳送
-
-### 3.登入
-
-####　3-1. Request URL
+### 3-1. 登入
+####　Request URL
 https://localhost:7057/api/Auth/login
 
-####　3-2. curl
-
+####　curl
  ```vim
 curl -X 'POST' \
   'https://localhost:7057/api/Auth/login' \
@@ -41,11 +42,14 @@ curl -X 'POST' \
   "account": "nick001",
   "password": "123456"
 }'
-
 ```
 
-#### 3-3. Request body
+#### Request body
 
+|參數名稱|參數型態|說明|
+|-|-|-|
+|account|string|帳號|
+|password|string|密碼|
 ```json
 {
   "account": "nick001",
@@ -53,8 +57,12 @@ curl -X 'POST' \
 }
 ```
 
-#### 3-4. Response body
-
+#### Response body
+|參數名稱|參數型態|說明|
+|-|-|-|
+|chatroomStatusCode|string||
+|description|string||
+|data|string||
 ```json
 {
   "chatroomStatusCode": 200,
@@ -65,3 +73,10 @@ curl -X 'POST' \
   }
 }
 ```
+### 3-2. 驗證使用者Token
+
+### 3-3. 使用者列表
+
+## 四、 聊天室
+### 4.1. 建立聊天室
+### 4-2. 取得訊息列表

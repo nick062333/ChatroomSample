@@ -5,8 +5,9 @@ using webapi.ViewModels.Message;
 
 namespace webapi.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 聊天室訊息
+    /// </summary>
     public class MessageController : BaseController
     {
         private readonly IChatService _chatService;

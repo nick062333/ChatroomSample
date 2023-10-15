@@ -8,7 +8,6 @@ using webapi.ViewModels.Auth;
 
 namespace webapi.Controllers
 {
-    [Authorize]
     public class AuthController : BaseController
     {
         private readonly IUserService _userService;

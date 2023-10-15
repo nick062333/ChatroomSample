@@ -19,6 +19,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import utility from './utility'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { fab  } from '@fortawesome/free-brands-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+
+library.add(fab , fas, far)
+
 const app = createApp(App,{
   methods: {
     LoginOff() {
@@ -26,7 +34,7 @@ const app = createApp(App,{
     },
   }
 
-})
+}).component('font-awesome-icon', FontAwesomeIcon)
 
 //必須使 next tick,會有載入順序問題, 導致綁定失敗
 nextTick(()=>{
@@ -41,5 +49,7 @@ app.use(Vuex)
 app.use(Store)
 app.use(utility);
 // app.use(cors)
+
+
 
 app.mount('#app')

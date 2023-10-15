@@ -1,12 +1,11 @@
-﻿using Core;
+﻿using System.Text.Json.Serialization;
+using Core;
 using DataClass.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Users;
 
 namespace webapi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
