@@ -2,9 +2,12 @@
 
 namespace Adapter.DBModel
 {
+    /// <summary>
+    /// 聊天室
+    /// </summary>
     public class Chatroom
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         public ChatroomType ChatroomType { get; set; }
 

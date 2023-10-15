@@ -1,3 +1,4 @@
+using Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
@@ -7,18 +8,25 @@ namespace webapi.Controllers
     /// </summary>
     public class ChatController : BaseController
     {
+        private readonly IChatroomService _chatroomService;
+
+        public ChatController(IChatroomService chatroomService)
+        {
+            _chatroomService = chatroomService;
+        }
+
         [HttpPost]
-        public async Task<ActionResult> CreateChatListAsync()
+        public async Task<ActionResult> CreateAsync()
         {
             await Task.CompletedTask;
             return Ok();
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetChatListAsync()
+        public async Task<ActionResult> GetListAsync()
         {
-            await Task.CompletedTask;
-            return Ok();
+            var chatroomList = await _chatroomService.GetChatroomListAsnyc();
+            return Ok(chatroomList);
         }
     }
 }

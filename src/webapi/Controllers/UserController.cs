@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Core;
+﻿using Core;
 using DataClass.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Users;

@@ -1,10 +1,8 @@
-﻿
-using Adapter.Models;
 using DataClass.DTOs;
 
 namespace Core
 {
-    public interface IChatService
+    public interface IMessageService
     {
         /// <summary>
         /// 取得訊息紀錄列表總筆數

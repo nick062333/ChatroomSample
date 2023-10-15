@@ -1,9 +1,6 @@
-﻿namespace Adapter.Models
+namespace DataClass.Models
 {
-    /// <summary>
-    /// 聊天室成員
-    /// </summary>
-    public class ChatroomMember
+    public class ChatroomModel
     {
         /// <summary>
         /// 聊天室代碼
@@ -14,11 +11,6 @@
         /// 使用者id
         /// </summary>
         public required string UserId { get; set; }
-
-        /// <summary>
-        /// 進入時間
-        /// </summary>
-        public DateTime EntryTime { get; set; }
 
         /// <summary>
         /// 最後登入時間

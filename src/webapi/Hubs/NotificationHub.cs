@@ -11,10 +11,10 @@ namespace webapi.Hubs
 {
     public class NotificationHub : Hub<INotificationClient>
     {
-        private readonly IChatService _chatService;
+        private readonly IMessageService _messageService;
 
-        public NotificationHub(IChatService chatService) {
-            _chatService = chatService;
+        public NotificationHub(IMessageService messageService) {
+            _messageService = messageService;
         }
 
         [Authorize]
@@ -29,7 +29,7 @@ namespace webapi.Hubs
             if(!long.TryParse(Context.User!.Identity!.Name, out long userId))
                 throw new Exception($"user id not number! userId:{Context.User!.Identity!.Name ?? string.Empty}");
 
-            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
+            await _messageService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
                     groupId,
                     userId, 
                     notification.Message,

@@ -1,5 +1,8 @@
 ﻿namespace Adapter.Models
 {
+    /// <summary>
+    /// 訊息
+    /// </summary>
     public class MessageLog
     {
         public long Id { get; set; }

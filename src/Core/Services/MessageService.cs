@@ -1,17 +1,20 @@
-﻿using Adapter.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using DataClass.DTOs;
 using DataService;
-using Microsoft.VisualBasic;
 
 namespace Core.Services
 {
-    public class ChatService : IChatService
+    public class MessageService : IMessageService
     {
         private readonly IMessageLogDataService _messageLogService;
+
         private readonly IMapper _mapper;
 
-        public ChatService(IMessageLogDataService messageLogService, IMapper mapper)
+        public MessageService(IMessageLogDataService messageLogService, IMapper mapper)
         {
             _mapper = mapper;
             _messageLogService = messageLogService;
@@ -47,8 +50,7 @@ namespace Core.Services
 
         public async Task ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
         {
-            //新增訊息至資料庫
             await _messageLogService.CreateMessageLogAsync(receiveMessageProcessRequest);
-        }
+        } 
     }
 }

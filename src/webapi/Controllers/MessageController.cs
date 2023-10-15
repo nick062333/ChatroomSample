@@ -10,17 +10,17 @@ namespace webapi.Controllers
     /// </summary>
     public class MessageController : BaseController
     {
-        private readonly IChatService _chatService;
+        private readonly IMessageService _messageService;
 
-        public MessageController(IChatService chatService) 
+        public MessageController(IMessageService messageService) 
         {
-            _chatService = chatService;
+            _messageService = messageService;
         }
 
         [HttpGet("insert_message")]
         public async Task<ActionResult> InsertMessageAsync(Guid groupId, long sendUserId, string message)
         {
-            await _chatService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(groupId, sendUserId, message, DateTime.Now));
+            await _messageService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(groupId, sendUserId, message, DateTime.Now));
             
             return Ok();
         }
@@ -28,14 +28,14 @@ namespace webapi.Controllers
         [HttpGet("get_message_log_list_total_count")]
         public async Task<ActionResult> GetMessageLogTotalCountAsync(Guid groupId)
         {
-            var result = await _chatService.GetMessageLogTotalCountAsync(new GetMessageLogTotalCountRequest(groupId));
+            var result = await _messageService.GetMessageLogTotalCountAsync(new GetMessageLogTotalCountRequest(groupId));
             return Ok(result);
         }
 
         [HttpPost("get_message_log_list")]
         public async Task<ActionResult> GetMessageLogListAsync(GetMessageLogListViewModel getMessageLogListViewModel)
         {
-            var messageLogs = await _chatService.GetMessageLogListAsync(new GetMessageLogListRequest(
+            var messageLogs = await _messageService.GetMessageLogListAsync(new GetMessageLogListRequest(
                 getMessageLogListViewModel.GroupId, 
                 getMessageLogListViewModel.StartIndex, 
                 getMessageLogListViewModel.PageSize));
@@ -46,7 +46,7 @@ namespace webapi.Controllers
         [HttpGet("get_message_log_list_by_id_range")]
         public async Task<ActionResult> GetMessageLogListByIdRangeAsync(Guid guid, int startId)
         {
-            var messageLogs = await _chatService.GetMessageLogListByIdRangeAsync(guid, startId);
+            var messageLogs = await _messageService.GetMessageLogListByIdRangeAsync(guid, startId);
             return Ok(messageLogs);
         }
     }

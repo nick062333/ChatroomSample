@@ -2,10 +2,14 @@
 
 namespace Adapter.Models
 {
+    /// <summary>
+    /// 使用者
+    /// </summary>
     public class User
     {
         public User()
-        {}
+        {
+        }
         
         public User(string userName, string account, DateTime createTime)
         {
