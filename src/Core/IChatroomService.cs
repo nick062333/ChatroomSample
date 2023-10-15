@@ -6,10 +6,11 @@ namespace Core
     public interface IChatroomService
     {
         /// <summary>
-        /// 取得使用者所有聊天室
+        /// 取得使用者聊天室列表
         /// </summary>
-        /// <returns>聊天室資訊</returns>
-        Task<List<ChatroomModel>> GetChatroomListAsnyc();
+        /// <param name="userId">使用者代碼</param>
+        /// <returns></returns>
+        Task<List<ChatroomModel>> GetChatroomListAsnyc(long userId);
 
         /// <summary>
         /// 建立聊天室

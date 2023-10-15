@@ -18,5 +18,11 @@ namespace webapi.Controllers
         [NonAction]
         public override OkObjectResult Ok([ActionResultObjectValue] object? value) 
             => base.Ok(new ResponseBase(value));
+
+
+        protected long GetUserId(){
+            _ = long.TryParse(User?.Identity?.Name, out long userId);
+            return userId;
+        }
     }
 }

@@ -7,23 +7,29 @@
 
 - [API Spec](#api-spec)
   - [一、目錄](#一目錄)
-  - [二、版本異動紀錄](#二版本異動紀錄)
   - [三、使用者](#三使用者)
     - [3-1. 登入](#3-1-登入)
       - [Request body](#request-body)
       - [Response body](#response-body)
     - [3-2. 驗證使用者Token](#3-2-驗證使用者token)
+      - [Request URL](#request-url)
+      - [Request body](#request-body-1)
+      - [Response body](#response-body-1)
     - [3-3. 使用者列表](#3-3-使用者列表)
+      - [Request URL](#request-url-1)
+      - [Request body](#request-body-2)
+      - [Response body](#response-body-2)
   - [四、 聊天室](#四-聊天室)
     - [4.1. 建立聊天室](#41-建立聊天室)
-    - [4-2. 取得訊息列表](#4-2-取得訊息列表)
+      - [Request URL](#request-url-2)
+      - [Request body](#request-body-3)
+      - [Response body](#response-body-3)
+    - [4-2. 取得聊天室列表](#4-2-取得聊天室列表)
+      - [Request URL](#request-url-3)
+      - [Request body](#request-body-4)
+      - [Response body](#response-body-4)
 
 <!-- /TOC -->
-
-## 二、版本異動紀錄
-
-|異動時間| 異動說明   |
-|--|--|
 | 2023/10/15 | ...|
 
 ## 三、使用者
@@ -31,18 +37,6 @@
 ### 3-1. 登入
 ####　Request URL
 https://localhost:7057/api/Auth/login
-
-####　curl
- ```vim
-curl -X 'POST' \
-  'https://localhost:7057/api/Auth/login' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "account": "nick001",
-  "password": "123456"
-}'
-```
 
 #### Request body
 
@@ -73,10 +67,67 @@ curl -X 'POST' \
   }
 }
 ```
+
 ### 3-2. 驗證使用者Token
+#### Request URL
+#### Request body
+#### Response body
+
 
 ### 3-3. 使用者列表
+#### Request URL
+#### Request body
+#### Response body
 
 ## 四、 聊天室
+
 ### 4.1. 建立聊天室
-### 4-2. 取得訊息列表
+#### Request URL
+#### Request body
+#### Response body
+
+### 4-2. 取得聊天室列表
+#### Request URL
+Method:GET
+https://localhost:7057/api/Chat
+
+#### Request body
+無
+
+
+#### Response body
+|參數名稱|參數型態|說明|
+|-|-|-|
+|chatroomStatusCode|string|狀態|
+|description|string|狀態說明|
+|data|**ChatroomModel**|聊天室列表資訊|
+
+**ChatroomModel**
+|參數名稱|參數型態|說明|
+|-|-|-|
+|ChatroomId|string|聊天室代碼|
+|UserId|string|使用者代碼|
+|UserName|string|使用者名稱|
+|LastLoginTime|string|最後登入時間|
+
+
+```json
+{
+    "ChatroomStatusCode": 200,
+    "Description": "",
+    "Data": [
+        {
+            "ChatroomId": "46be0312-c43a-451d-8489-45f426bdba54",
+            "UserId": "9",
+            "UserName": "Andy",
+            "LastLoginTime": "0001-01-01T00:00:00"
+        },
+        {
+            "ChatroomId": "46be0312-c43a-451d-8489-45f426bdba54",
+            "UserId": "10",
+            "UserName": "Nick",
+            "LastLoginTime": "0001-01-01T00:00:00"
+        }
+    ]
+}
+```

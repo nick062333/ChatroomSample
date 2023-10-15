@@ -21,9 +21,13 @@ namespace Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<ChatroomModel>> GetChatroomListAsnyc()
+        public async Task<List<ChatroomModel>> GetChatroomListAsnyc(long userId)
         {
-            return await _chatroomDataService.GetChatroomListAsnyc();
+            var chatroomList = await _chatroomDataService.GetChatroomListAsnyc();
+            return chatroomList
+                    .Where(x => !x.UserId.Equals(userId))
+                    .OrderByDescending(x => x.LastLoginTime)
+                    .ToList();
         }
     }
 }

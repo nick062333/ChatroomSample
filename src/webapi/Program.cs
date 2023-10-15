@@ -4,6 +4,7 @@ using Core.Registers;
 using DataClass;
 using DataClass.Configs;
 using DataClass.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Utility.Registers;
@@ -23,6 +24,7 @@ try
 
     builder.Services.Configure<AesEncryptionSettings>(configuration.GetSection("AesEncryptionSettings"));
 
+    builder.Logging.ClearProviders();
     builder.Host.UseSerilog((context, services, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration)
             .Enrich.FromLogContext()
@@ -68,8 +70,6 @@ try
     builder.Services.RegisterDataService();
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     builder.Services.RegisterValidator();
-    // builder.Logging.ClearProviders();
-    // builder.Logging.AddConsole();
 
     builder.Services.AddLogging(loggingBuilder =>
     {
@@ -82,6 +82,8 @@ try
         option.Issuer = configuration.GetValue<string>("JwtSettings:Issuer")!;
         option.SignKey = configuration.GetValue<string>("JwtSettings:SignKey")!;
     });
+
+    builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
 
     var app = builder.Build();
 
@@ -102,11 +104,6 @@ try
 
     app.UseCors(CorsRegister.HubClienOriginsPolicyName);
     app.MapControllers();
-
-  
-
-
-  
 
     app.MapHub<NotificationHub>("/hub/notification");
 
