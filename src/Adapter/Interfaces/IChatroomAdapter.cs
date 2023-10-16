@@ -14,8 +14,8 @@ namespace Adapter.Interfaces
         /// <summary>
         /// 建立聊天室
         /// </summary>
-        /// <param name="userIds">聊天對象-使用者代碼</param>
-        /// <returns>聊天室資訊</returns>
-        Task<Chatroom> AddChatroomAsync(params long[] userIds);
+        /// <param name="chatroom">聊天對象-使用者代碼</param>
+        /// <returns></returns>
+        Task AddChatroomAsync(Chatroom chatroom);
     }
 }

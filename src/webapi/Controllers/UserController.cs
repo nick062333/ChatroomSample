@@ -1,5 +1,6 @@
 ﻿using Core;
 using DataClass.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Users;
 
@@ -15,6 +16,7 @@ namespace webapi.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         // [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterAsync(UserViewModel user) 
         { 

@@ -3,6 +3,7 @@ using Adapter.DBModel;
 using Adapter.Interfaces;
 using Adapter.Models;
 using Dapper;
+using Utility;
 
 namespace Adapter.Adapters
 {
@@ -15,9 +16,14 @@ namespace Adapter.Adapters
             _unitOfWork = unitOfWork;
         }
 
-        public Task<Chatroom> AddChatroomAsync(params long[] userIds)
+        public async Task AddChatroomAsync(Chatroom chatroom)
         {
-            throw new NotImplementedException();
+            var param = new DynamicParameters();
+            param.Add("@Id", chatroom.Id, DbType.Guid);
+            param.Add("@ChatroomType", chatroom.ChatroomType, dbType: DbType.Int64);
+            param.Add("@CreateTime", TwDateTime.Now, dbType: DbType.DateTime);
+
+            await _unitOfWork.Connection.ExecuteAsync("usp_Chatroom_Add",param, _unitOfWork.Transaction, commandType: CommandType.StoredProcedure);
         }
 
         public async Task<IEnumerable<ChatroomMember>> GetChatroomListAsnyc()

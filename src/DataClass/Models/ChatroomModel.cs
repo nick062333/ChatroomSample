@@ -1,3 +1,5 @@
+using DataClass.Enums;
+
 namespace DataClass.Models
 {
     public class ChatroomModel
@@ -10,7 +12,7 @@ namespace DataClass.Models
         /// <summary>
         /// 使用者id
         /// </summary>
-        public string UserId { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
         /// 使用者名稱
@@ -22,5 +24,11 @@ namespace DataClass.Models
         /// 最後登入時間
         /// </summary>
         public DateTime LastLoginTime { get; set; }
+
+        /// <summary>
+        /// 聊天室類型
+        /// </summary>
+        /// <value></value>
+        public ChatroomType ChatroomType { get;set; }
     }
 }

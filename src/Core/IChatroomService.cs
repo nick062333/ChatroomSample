@@ -1,4 +1,5 @@
 ﻿using Adapter.DBModel;
+using DataClass.DTOs;
 using DataClass.Models;
 
 namespace Core
@@ -15,8 +16,8 @@ namespace Core
         /// <summary>
         /// 建立聊天室
         /// </summary>
-        /// <param name="userIds">聊天對象-使用者代碼</param>
+        /// <param name="addChatroomRequest">新增聊天室相關參數</param>
         /// <returns>聊天室資訊</returns>
-        Task<Chatroom> AddChatroomAsync(params long[] userIds);
+        Task<ChatroomModel> AddChatroomAsync(AddChatroomRequest addChatroomRequest);
     }
 }

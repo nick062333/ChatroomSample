@@ -13,7 +13,7 @@
         /// <summary>
         /// 使用者id
         /// </summary>
-        public string UserId { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
         /// 進入時間

@@ -1,5 +1,7 @@
 ﻿using Core;
 using DataClass.DTOs;
+using DataClass.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using webapi.ViewModels.Message;
 
@@ -44,9 +46,20 @@ namespace webapi.Controllers
         }
 
         [HttpGet("get_message_log_list_by_id_range")]
-        public async Task<ActionResult> GetMessageLogListByIdRangeAsync(Guid guid, int startId)
+        [AllowAnonymous]
+        public async Task<ActionResult> GetMessageLogListByIdRangeAsync(
+            Guid chatroomId, 
+            long messageId, 
+            QueryModeType queryModeType,
+            int maxCount)
         {
-            var messageLogs = await _messageService.GetMessageLogListByIdRangeAsync(guid, startId);
+            var getMessageLogListByIdRangeRequest = new GetMessageLogListByIdRangeRequest(){
+                ChatroomId = chatroomId,
+                MessageId = messageId,
+                QueryModeType = queryModeType,
+                MaxCount = maxCount
+            };
+            var messageLogs = await _messageService.GetMessageLogListByIdRangeAsync(getMessageLogListByIdRangeRequest);
             return Ok(messageLogs);
         }
     }

@@ -1,5 +1,7 @@
 using Core;
+using DataClass.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using webapi.ViewModels.Chatroom;
 
 namespace webapi.Controllers
 {
@@ -16,10 +18,13 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAsync()
+        public async Task<ActionResult> CreateAsync(AddChatroomModel addChatroomModel)
         {
-            await Task.CompletedTask;
-            return Ok();
+            var chatroom = await _chatroomService.AddChatroomAsync(new AddChatroomRequest(){
+                UserId = addChatroomModel.UserId
+            });
+
+            return Ok(chatroom);
         }
 
         [HttpGet]

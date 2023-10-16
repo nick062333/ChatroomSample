@@ -16,7 +16,7 @@ namespace Adapter.Registers
             services.AddScoped<IMessageLogAdapter, MessageLogAdapter>();  
             services.AddScoped<IUserAdapter, UserAdapter>();
             services.AddScoped<IChatroomAdapter, ChatroomAdapter>();
-            
+            services.AddScoped<IChatroomMemberAdapter, ChatroomMemberAdapter>();
             //services.AddDbContext<ChatroomDBContext>(options => options.UseSqlServer(connectionSetting));
         }
     }

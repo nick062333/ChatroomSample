@@ -1,5 +1,7 @@
 import axios from 'axios';
 import store from '../store';
+import router from '../router'
+
 
 var instance = axios.create({
     baseURL: 'https://localhost:7057/api/',
@@ -28,7 +30,6 @@ instance.interceptors.request.use(function (config) {
         
     return config;
   }, function (error) {
-    // 对请求错误做些什么
     return Promise.reject(error);
   });
 
@@ -46,9 +47,18 @@ instance.interceptors.request.use(function (config) {
     }
     else{
         //回傳一個以 reason 拒絕的 Promise 物件
-
         // alert('連線失敗，後台掛掉或沒網路')
-        return Promise.reject(error);
+
+        router.push("/login");
+
+        store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
+    
+        window.localStorage.setItem('userData', JSON.stringify({ 
+              token:'',
+              userName: '',
+              isLogin: false, 
+          }));
+        // return Promise.reject(error);
     }
   });
 

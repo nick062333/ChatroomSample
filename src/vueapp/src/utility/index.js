@@ -18,6 +18,10 @@ const utility = {
 
     IsArrayNotNullAndNotEmpty(arr) {
         return arr !== null && arr.length > 0;
+    },
+
+    IsNotNullAndNotEmpty(value) {
+        return value !== null && value;
     }
 }
 

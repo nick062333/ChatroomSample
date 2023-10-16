@@ -1,5 +1,5 @@
-﻿using Adapter.DBModel;
-using AutoMapper;
+﻿using AutoMapper;
+using DataClass.DTOs;
 using DataClass.Models;
 using DataService;
 
@@ -16,9 +16,17 @@ namespace Core.Services
             _chatroomDataService = chatroomDataService;
         }
 
-        public async Task<Chatroom> AddChatroomAsync(params long[] userIds)
+        public async Task<ChatroomModel> AddChatroomAsync(AddChatroomRequest addChatroomRequest)
         {
-            throw new NotImplementedException();
+            ChatroomModel chatroom = new()
+            {
+                ChatroomId = Guid.NewGuid(),
+                UserId = addChatroomRequest.UserId
+            };
+
+            await _chatroomDataService.AddChatroomAsync(chatroom);
+
+            return chatroom;
         }
 
         public async Task<List<ChatroomModel>> GetChatroomListAsnyc(long userId)

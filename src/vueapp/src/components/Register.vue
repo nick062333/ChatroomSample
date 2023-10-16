@@ -70,17 +70,6 @@
         </form>
     </div>
   </div>
-  <div class="row align-items-end">
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-    <div class="col">
-      One of three columns
-    </div>
-  </div>
 </template>
 
 <style>
