@@ -284,17 +284,22 @@
                                 <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="xl" />
                             </span>
                         </div>
-                        <input type="text" class="form-control" placeholder="Search...">
+                        <input type="text" class="form-control" placeholder="Search..." v-model="keyword">
                     </div>
                     <ul class="list-unstyled chat-list mt-2 mb-0">
-                        <li class="clearfix">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
+                        <li class="clearfix" v-if="this.tempChatroomList" v-for="(item) in this.tempChatroomList" 
+                            :class="{ 'active' : this.groupId == item.ChatroomId }" 
+                            v-bind:key="item.ChatroomId"
+                            v-on:click="SetGroup(item)">
+                            <!-- <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar"> -->
+                            <img src="..\images\default.png" alt="avatar">
+                            
                             <div class="about">
-                                <div class="name">Vincent Porter</div>
-                                <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                            
+                                <div class="name">{{ item.UserName }}<br> {{ item.ChatroomId  }}</div>
+                                <!-- <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                             -->
                             </div>
                         </li>
-                        <li class="clearfix">
+                        <!-- <li class="clearfix">
                             <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
                             <div class="about">
                                 <div class="name">Vincent Porter</div>
@@ -349,7 +354,7 @@
                                 <div class="name">Dean Henry1</div>
                                 <div class="status"> <i class="fa fa-circle offline"></i> offline since Oct 28 </div>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="chat">
@@ -357,11 +362,12 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
+                                    <!-- <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar"> -->
+                                    <img src="..\images\default.png" alt="avatar">
                                 </a>
                                 <div class="chat-about">
-                                    <h6 class="m-b-0">Aiden Chavez</h6>
-                                    <small>Last seen: 2 hours ago</small>
+                                    <h6 class="m-b-0" v-if="ChatroomData">{{ ChatroomData.UserName }}</h6>
+                                    <!-- <small>Last seen: 2 hours ago</small> -->
                                 </div>
                             </div>
                             <!-- <div class="col-lg-6 hidden-sm text-right">
@@ -372,7 +378,7 @@
                         </div>
                     </div>
                     <div class="chat-history">
-                        <ul class="m-b-0 scrollbar" @scroll.passive="handleScroll" ref="messageBox">
+                        <ul class="m-b-0 scrollbar" @scroll.passive="HandleScroll" ref="messageBox">
                             <li class="clearfix" v-if="messageLog" v-for="(item, index) in messageLog">
                                 <div class="message-data" :class="[{ 'text-right': item.SendUserId == this.$store.state.auth.userId}]">
                                     <span class="message-data-time">{{  $moment(item.SendTime).format('YYYY-MM-DD HH:mm') }}</span>
@@ -408,6 +414,7 @@
 <script>
 import * as signalR from '@microsoft/signalr';
 import { createStore, set, get } from 'idb-keyval';
+import { resolveDynamicComponent } from 'vue';
 
 
 
@@ -415,7 +422,8 @@ export default
 {
     data(){
         return {
-            chatList:[],
+            keyword:'',
+            chatroomList:[],
             isLoadMessage:false,
             loadMessageBtnName:"載入歷史訊息(20筆)",
             messageLogCount:0,
@@ -425,7 +433,7 @@ export default
             name: null,
             groupId:"46be0312-c43a-451d-8489-45f426bdba54",
             tmpMessage:"",
-            messageLog:[]
+            messageLog:[],
         }
     },
     watch: {
@@ -436,7 +444,33 @@ export default
             deep: true
         }
     },
+
+    computed:{
+        ChatroomData(){
+
+            if(!this.chatroomList)
+                return null;
+
+            var chatroom = this.chatroomList.filter((item) => { return item.ChatroomId == this.groupId });
+            console.log('chatroom', chatroom);
+
+            return chatroom[0];
+        },
+
+        tempChatroomList()
+        {
+            if(!this.$utility.IsNotNullAndNotEmpty(this.keyword))
+                return this.chatroomList;
+
+            return this.chatroomList.filter((item) => {
+                console.log(item);
+                return item.UserName.indexOf(this.keyword) > -1;
+            })
+        }
+    },
+
     created(){
+        this.GetChatroomList();
         this.SetMessageTotalCount();
         this.InitMessageLogData();
         this.InitSignalR();
@@ -536,7 +570,8 @@ export default
 
                         this.$api.v1.message.getMessageLogListByIdRange({ 
                             groupId: this.groupId, 
-                            startId: maxIdItem.Id 
+                            messageId: maxIdItem.Id,
+                            queryModeType: 1
                         })
                         .then((response) => {
                             console.log('getMessageLogListByIdRange', response);
@@ -609,12 +644,45 @@ export default
                 });
         },
 
-        handleScroll (e) {
+        HandleScroll (e) {
             console.log(e.target.scrollTop);
 
             if(e.target.scrollTop == 2000)
             {
                 this.GetMessageLogList();
+            }
+        },
+
+        GetChatroomList(){
+            this.$api.v1.chatroom.getChatroomList()
+                .then((response) =>{
+                    console.log('GetChatroomList',response);
+
+                    if(response.data.ChatroomStatusCode == 200)
+                        this.chatroomList = response.data.Data;
+                })
+        },
+
+        SetGroup(group)
+        {
+            console.log('SetGroup',group.ChatroomId, group.UserId);
+
+            if(group.ChatroomId == "00000000-0000-0000-0000-000000000000")
+            {
+                this.$api.v1.chatroom.addChatroom({
+                    userId: group.UserId
+                })
+                    .then((response) => {
+                        if(response.data.ChatroomStatusCode == 200)
+                        {
+                            console.log('addChatroom', response);
+                            group.ChatroomId = response.data.Data.ChatroomId;
+                            this.groupId = group.ChatroomId;
+                        }
+                    });
+            }
+            else{
+                this.groupId = group.ChatroomId;
             }
         }
     }
