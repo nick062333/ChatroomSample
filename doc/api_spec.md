@@ -28,6 +28,15 @@
       - [Request URL](#request-url-3)
       - [Request body](#request-body-4)
       - [Response body](#response-body-4)
+  - [五、訊息](#五訊息)
+    - [5-1. 取得聊天室最新訊息](#5-1-取得聊天室最新訊息)
+      - [Request URL](#request-url-4)
+      - [Request body](#request-body-5)
+      - [Response body](#response-body-5)
+    - [5-2. 取得聊天室歷史訊息](#5-2-取得聊天室歷史訊息)
+      - [Request URL](#request-url-5)
+      - [Request body](#request-body-6)
+      - [Response body](#response-body-6)
 
 <!-- /TOC -->
 | 2023/10/15 | ...|
@@ -75,16 +84,35 @@ https://localhost:7057/api/Auth/login
 
 
 ### 3-3. 使用者列表
+
 #### Request URL
+
 #### Request body
+
 #### Response body
 
 ## 四、 聊天室
 
 ### 4.1. 建立聊天室
+
 #### Request URL
+Method:POST
+https://localhost:7057/api/Chatroom
+
 #### Request body
+
 #### Response body
+{
+    "ChatroomStatusCode": 200,
+    "Description": "",
+    "Data": {
+        "ChatroomId": "a0d47cab-9d0e-4a0d-bf30-619e582083c8",
+        "UserId": 13,
+        "UserName": null,
+        "LastLoginTime": "0001-01-01T00:00:00",
+        "ChatroomType": 0
+    }
+}
 
 ### 4-2. 取得聊天室列表
 #### Request URL
@@ -131,3 +159,61 @@ https://localhost:7057/api/Chat
     ]
 }
 ```
+
+## 五、訊息
+
+### 5-1. 取得聊天室最新訊息
+
+#### Request URL
+Method: GET
+https://localhost:7057/api/Message?chatroomId=46BE0312-C43A-451D-8489-45F426BDBA54&messageId=10090&queryModeType=1&maxCount=20
+
+#### Request body
+|參數名稱|參數型態|說明|
+|-|-|-|
+|chatroomId|Guid|聊天室代碼|
+|messageId|long|訊息代碼|
+|queryModeType|QueryModeType|查詢模式 1:查詢最新訊息 2:查歷史訊息|
+|maxCount|int|回傳最大筆數限制|
+
+#### Response body
+
+```json
+{
+    "ChatroomStatusCode": 200,
+    "Description": "",
+    "Data": {
+        "MessageLogs": [
+            {
+                "Id": 10101,
+                "GroupId": "46be0312-c43a-451d-8489-45f426bdba54",
+                "Status": 1,
+                "Message": "1231231",
+                "SendUserId": 10,
+                "SendTime": "2023-10-16T02:54:59.517",
+                "UserName": "Nick"
+            },
+            {
+                "Id": 10100,
+                "GroupId": "46be0312-c43a-451d-8489-45f426bdba54",
+                "Status": 1,
+                "Message": "123",
+                "SendUserId": 10,
+                "SendTime": "2023-10-16T02:54:16.517",
+                "UserName": "Nick"
+            }
+        ],
+        "MixMessageId": 10100,
+        "MaxMessageId": 10101,
+        "Count": 2
+    }
+}
+```
+
+### 5-2. 取得聊天室歷史訊息
+
+#### Request URL
+
+#### Request body
+
+#### Response body
