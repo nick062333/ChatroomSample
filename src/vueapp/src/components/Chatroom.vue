@@ -414,9 +414,6 @@
 <script>
 import * as signalR from '@microsoft/signalr';
 import { createStore, set, get } from 'idb-keyval';
-import { resolveDynamicComponent } from 'vue';
-
-
 
 export default 
 {
@@ -622,13 +619,14 @@ export default
 
                 this.hubConnection.start();
 
-                this.hubConnection.on("ReceiveMessage", (userName, message, sendTime, status)  => {
+                this.hubConnection.on("ReceiveMessage", (userName, messageId, message, sendTime, status)  => {
                     this.messageLog.push({ 
                         GroupId: this.groupId, 
                         Status: status,
                         UserName: userName, 
                         SendUserId: this.$store.state.auth.userId,
                         Message: message, 
+                        Id: messageId,
                         SendTime: sendTime
                     });
                 });

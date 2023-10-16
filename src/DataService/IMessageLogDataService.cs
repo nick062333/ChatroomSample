@@ -1,17 +1,16 @@
 ﻿using DataClass.DTOs;
 using DataClass.Models;
-using System;
 
 namespace DataService
 {
     public interface IMessageLogDataService
     {
-        public Task CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
-
-        public Task<List<MessageLogModel>> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest);
+        public Task<long> CreateMessageLogAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
 
         public Task<int> GetMessageLogTotalCountByGroupIdAsync(Guid groupId);
 
-        public Task<List<MessageLogModel>> GetMessageLogListByIdRangeAsync(Guid groupId, int startId);
+        public Task<List<MessageLogModel>> GetNewMessageListAsync(Guid groupId, long startMessageId, int maxCount);
+
+        public Task<List<MessageLogModel>> GetHistoryMessageListAsync(Guid groupId, long endMessageId, int maxCount);
     }
 }

@@ -29,7 +29,7 @@ namespace webapi.Hubs
             if(!long.TryParse(Context.User!.Identity!.Name, out long userId))
                 throw new Exception($"user id not number! userId:{Context.User!.Identity!.Name ?? string.Empty}");
 
-            await _messageService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
+            var messageId = await _messageService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(
                     groupId,
                     userId, 
                     notification.Message,
@@ -41,7 +41,7 @@ namespace webapi.Hubs
 
             await Clients
                 .Group(groupId.ToString())
-                .ReceiveMessage(userName, notification.Message, TwDateTime.Now, MessageLogStatus.Enable);
+                .ReceiveMessage(userName, messageId, notification.Message, TwDateTime.Now, MessageLogStatus.Enable);
         }
     }
 }

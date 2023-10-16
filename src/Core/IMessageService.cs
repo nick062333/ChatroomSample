@@ -13,24 +13,17 @@ namespace Core
         public Task<GetMessageLogTotalCountResponse> GetMessageLogTotalCountAsync(GetMessageLogTotalCountRequest getMessageLogTotalCountRequest);
 
         /// <summary>
-        /// 取得訊息紀錄
-        /// </summary>
-        /// <param name="getMessageLogListRequest">查詢參數</param>
-        /// <returns></returns>
-        public Task<GetMessageLogListResponse> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest);
-
-        /// <summary>
         /// 接收訊息後的處理程序
         /// </summary>
         /// <param name="receiveMessageProcessRequest">查詢參數</param>
         /// <returns></returns>
-        public Task ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
+        public Task<long> ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest);
 
         /// <summary>
         /// 取得Id範圍內的訊息
         /// </summary>
         /// <param name="request">查詢參數</param>
         /// <returns></returns>
-        public Task<GetMessageLogListByIdRangeResponse> GetMessageLogListByIdRangeAsync(GetMessageLogListByIdRangeRequest request);
+        public Task<GetMessageLogListByIdRangeResponse> GetMessageLogListAsync(GetMessageLogListByIdRangeRequest request);
     }
 }

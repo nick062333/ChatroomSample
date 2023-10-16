@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using DataClass.DTOs;
+using DataClass.Enums;
+using DataClass.Models;
 using DataService;
 
 namespace Core.Services
@@ -20,23 +18,21 @@ namespace Core.Services
             _messageLogService = messageLogService;
         }
 
-        public async Task<GetMessageLogListResponse> GetMessageLogListAsync(GetMessageLogListRequest getMessageLogListRequest)
+        public async Task<GetMessageLogListByIdRangeResponse> GetMessageLogListAsync(GetMessageLogListByIdRangeRequest request)
         {
-            var messageLogs = await _messageLogService.GetMessageLogListAsync(getMessageLogListRequest);
-            
-            return new GetMessageLogListResponse()
-            {
-                MessageLogs = messageLogs
-            };
-        }
+             List<MessageLogModel> result;
 
-        public async Task<GetMessageLogListByIdRangeRequest> GetMessageLogListByIdRangeAsync(Guid groupId, int startId)
-        {
-            var messageLogs = await _messageLogService.GetMessageLogListByIdRangeAsync(groupId, startId);
+            if(request.QueryModeType == QueryModeType.NewMessage)
+                result = await _messageLogService.GetNewMessageListAsync(request.ChatroomId, request.MessageId, request.MaxCount);
+            else
+                result = await _messageLogService.GetHistoryMessageListAsync(request.ChatroomId, request.MessageId, request.MaxCount);
 
-            return new GetMessageLogListByIdRangeRequest()
+            return new GetMessageLogListByIdRangeResponse()
             {
-                MessageLogs = messageLogs
+                MaxMessageId = result.Max(x => x.Id),
+                MixMessageId = result.Min(x => x.Id),
+                MessageLogs = result,
+                Count = result.Count 
             };
         }
 
@@ -48,9 +44,9 @@ namespace Core.Services
             };
         }
 
-        public async Task ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
+        public async Task<long> ReceiveMessageProcessAsync(ReceiveMessageProcessRequest receiveMessageProcessRequest)
         {
-            await _messageLogService.CreateMessageLogAsync(receiveMessageProcessRequest);
+            return await _messageLogService.CreateMessageLogAsync(receiveMessageProcessRequest);
         } 
     }
 }

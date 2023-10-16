@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using System.Runtime.InteropServices;
+using Core;
 using DataClass.DTOs;
 using DataClass.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -19,33 +20,23 @@ namespace webapi.Controllers
             _messageService = messageService;
         }
 
-        [HttpGet("insert_message")]
-        public async Task<ActionResult> InsertMessageAsync(Guid groupId, long sendUserId, string message)
+        [HttpGet("insert")]
+        [AllowAnonymous]
+        public async Task<ActionResult> InsertMessageAsync(Guid groupId,long sendUserId, string message)
         {
             await _messageService.ReceiveMessageProcessAsync(new ReceiveMessageProcessRequest(groupId, sendUserId, message, DateTime.Now));
             
             return Ok();
         }
 
-        [HttpGet("get_message_log_list_total_count")]
+        [HttpGet("count")]
         public async Task<ActionResult> GetMessageLogTotalCountAsync(Guid groupId)
         {
             var result = await _messageService.GetMessageLogTotalCountAsync(new GetMessageLogTotalCountRequest(groupId));
             return Ok(result);
         }
 
-        [HttpPost("get_message_log_list")]
-        public async Task<ActionResult> GetMessageLogListAsync(GetMessageLogListViewModel getMessageLogListViewModel)
-        {
-            var messageLogs = await _messageService.GetMessageLogListAsync(new GetMessageLogListRequest(
-                getMessageLogListViewModel.GroupId, 
-                getMessageLogListViewModel.StartIndex, 
-                getMessageLogListViewModel.PageSize));
-
-            return Ok(messageLogs);
-        }
-
-        [HttpGet("get_message_log_list_by_id_range")]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> GetMessageLogListByIdRangeAsync(
             Guid chatroomId, 
@@ -59,7 +50,9 @@ namespace webapi.Controllers
                 QueryModeType = queryModeType,
                 MaxCount = maxCount
             };
-            var messageLogs = await _messageService.GetMessageLogListByIdRangeAsync(getMessageLogListByIdRangeRequest);
+
+            var messageLogs = await _messageService.GetMessageLogListAsync(getMessageLogListByIdRangeRequest);
+
             return Ok(messageLogs);
         }
     }
