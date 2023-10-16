@@ -28,10 +28,10 @@ namespace webapi.Filters
         }
 
         if(!authorizeResult.Succeeded){
-            await context.Response.WriteAsJsonAsync(new ResponseBase(
-                ChatroomStatusCode.JWTInvalid,
-                 ChatroomStatusCode.JWTInvalid.GetDisplayName()));
-            return;
+            // await context.Response.WriteAsJsonAsync(new ResponseBase(
+            //     ChatroomStatusCode.JWTInvalid,
+            //      ChatroomStatusCode.JWTInvalid.GetDisplayName()));
+            // return;
         }
 
         // Fall back to the default implementation.

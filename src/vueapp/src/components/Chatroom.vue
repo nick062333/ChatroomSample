@@ -35,7 +35,7 @@
 }
 
 .chat-list{
-    height: 500px;
+    height: 350px;
     overflow: auto;
 }
 
@@ -292,10 +292,13 @@
                             v-bind:key="item.ChatroomId"
                             v-on:click="SetGroup(item)">
                             <!-- <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar"> -->
-                            <img src="..\images\default.png" alt="avatar">
+                            <img src="..\images\default.png" alt="avatar" >
                             
                             <div class="about">
-                                <div class="name">{{ item.UserName }}<br> {{ item.ChatroomId  }}</div>
+                                <div class="name" >
+                                    {{ item.UserName }}<br>
+                                     <!-- {{ item.ChatroomId  }} -->
+                                </div>
                                 <!-- <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                             -->
                             </div>
                         </li>
@@ -389,7 +392,9 @@
                                     item.SendUserId == this.$store.state.auth.userId ? 'other-message' : 'my-message',
                                     item.SendUserId == this.$store.state.auth.userId ? 'float-right': ''
                                 ]">
-                                     {{ item.Id }}. {{ item.Message }} 
+                                <!-- {{ item.Id }}.   -->
+                                {{ item.Message }}
+                                     
                                      <!-- {{ item.SendUserId }} 
                                      {{ this.$store.state.auth.userId }} 
                                      {{ item.SendUserId == this.$store.state.auth.userId }} -->
@@ -397,10 +402,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="chat-message clearfix">
+                    <div class="chat-message clearfix" v-if="this.groupId">
                         <div class="input-group mb-0">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" @click="SendMessage"><font-awesome-icon :icon="['far', 'paper-plane']" size="xl" /></span>
+                                <span class="input-group-text" @click="SendMessage" :disabled="isSendMessage" ><font-awesome-icon :icon="['far', 'paper-plane']" size="xl" /></span>
                             </div>
                             <textarea type="textarea" class="form-control" placeholder="Enter text here..." v-model="tmpMessage"></textarea>                                    
                         </div>
@@ -413,7 +418,8 @@
 
 <script>
 import * as signalR from '@microsoft/signalr';
-import { createStore, set, get } from 'idb-keyval';
+// import { createStore, set, get, promisifyRequest } from 'idb-keyval';
+import {  set, get, createStore } from 'idb-keyval';
 
 export default 
 {
@@ -423,20 +429,21 @@ export default
             chatroomList:[],
             isLoadMessage:false,
             loadMessageBtnName:"載入歷史訊息(20筆)",
-            messageLogCount:0,
             totalCount:0,
             pageSize:20,
             hubConnection: null,
             name: null,
-            groupId:"46be0312-c43a-451d-8489-45f426bdba54",
+            groupId:"",
+            isSendMessage: true,
             tmpMessage:"",
             messageLog:[],
+            isLoadingCompleted:false
         }
     },
     watch: {
         messageLog:{
             handler() {
-                this.SetMessageLogBtnInfo();
+                // this.SetMessageLogBtnInfo();
             },
             deep: true
         }
@@ -468,12 +475,11 @@ export default
 
     created(){
         this.GetChatroomList();
-        this.SetMessageTotalCount();
-        this.InitMessageLogData();
-        this.InitSignalR();
     },
     methods:{
         SendMessage(){
+
+            this.isSendMessage = false;
             this.$api.auth.check()
                 .then((response) => {
                     var isVaild = response.data.Data;
@@ -488,6 +494,8 @@ export default
                             // this.$refs.messageBox.target.scrollTop = 
 
                             this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+
+                            this.tmpMessage = '';
                         })
                         .catch((error) => {
                             console.log('send message error', error);
@@ -498,96 +506,113 @@ export default
                         this.$utility.SignOut();
                     }
                 })
+
+            this.isSendMessage = true;
         },
         GetMessageLogList()
         {
-            console.log('GetMessageLogList',this.messageLogCount)
+            console.log('GetMessageLogList');
+            //isLoadingCompleted
+
+            if(this.isLoadingCompleted){
+                return;
+            }
+
+            const ids = this.messageLog.map(object => {
+                return object.Id;
+            });
+
+            const minMessageId = Math.min(...ids);
+            console.log('minMessageId', minMessageId); 
+
             this.$api.v1.message.getMessageLogList({ 
-                    groupId : this.groupId, 
-                    startIndex : this.messageLogCount <= 0 ? 0 : this.messageLogCount - 1, 
-                    pageSize : this.pageSize 
+                    chatroomId: this.groupId, 
+                    messageId: minMessageId,
+                    queryModeType: 2
                 })
                 .then((response) => {
                     let responseData = response.data;
-                    console.log('LoadMessage', responseData);
+                    console.log('Load Message', responseData);
 
-                    if(responseData && responseData.ChatroomStatusCode == 200 && responseData.Data.MessageLogs)
+                    if(responseData && responseData.ChatroomStatusCode == 200)
                     {
-                        responseData.Data.MessageLogs.forEach(element => {
-                            this.messageLog.unshift(element);
-                        });
+                        if(responseData.Data.MessageLogs)
+                        {
+                            responseData.Data.MessageLogs.forEach(element => {
+                                this.messageLog.unshift(element);
+                            });
 
-                        this.SetMessageCache();
+                            this.SetMessageCache();
+                        }
+                        else{
+
+                            this.isLoadingCompleted = true;
+                        }
                     }
                 
-                    this.SetMessageLogBtnInfo();
+                    // this.SetMessageLogBtnInfo();
                 })
         },
-        SetMessageTotalCount()
-        {
-            this.totalCount = 0;
-
-            this.$api.v1.message.getMessageLogListTotalCount({ groupId : this.groupId })
-                .then((response) => {
-                    console.log('getMessageLogListTotalCount', response);
-                    this.totalCount = response.data.Data.TotalCount;
-                    this.SetMessageLogBtnInfo();
-        
-                });
-        },
-
-        SetMessageLogBtnInfo()
-        {
-            if(this.messageLogCount < this.totalCount)
-            {
-                this.isLoadMessage = true;
-                this.loadMessageBtnName = "載入歷史訊息(20筆)";
-            }
-            else{
-                this.isLoadMessage = false;
-                this.loadMessageBtnName = "訊息載入完畢";
-            }
-        }, 
 
         InitMessageLogData(){
-            this.groupMessageDB = createStore('messageDB', this.groupId);
 
-            get(this.groupId, this.groupMessageDB)
+            let groupMessageDB = createStore(`messageDB-${this.groupId}`, this.groupId);
+
+            get(this.groupId, groupMessageDB)
                 .then((val) => {
                     console.log('groupMessageDB', val);
+
+                    let getMessageInfoRequest = { 
+                            chatroomId: this.groupId, 
+                            messageId: 0,
+                            queryModeType: 1
+                        };
+
                     if(val) {
                         this.messageLog = JSON.parse(val);
 
-                        const maxIdItem = this.messageLog 
-                            .reduce((max, item) => (item.Id > max.Id ? item : max), this.messageLog[0]);
+                        const ids = this.messageLog.map(object => {
+                            return object.Id;
+                        });
 
-                        console.log('maxIdItem', maxIdItem);
+                        const maxMessageId = Math.max(...ids);
+                        console.log('maxMessageId',ids, maxMessageId); 
 
-                        console.log('messageLog',this.messageLog);
-
-                        this.$api.v1.message.getMessageLogListByIdRange({ 
-                            groupId: this.groupId, 
-                            messageId: maxIdItem.Id,
-                            queryModeType: 1
-                        })
+                        getMessageInfoRequest.messageId = maxMessageId;
+                    }
+                    
+                    //確認有無尚未顯示的訊息
+                    this.$api.v1.message.getMessageList(getMessageInfoRequest)
                         .then((response) => {
-                            console.log('getMessageLogListByIdRange', response);
+                            console.log('getMessageList', response);
 
-                            if(response.data.ChatroomStatusCode == 200 && this.$utility.IsArrayNotNullAndNotEmpty(response.data.Data))
+                            if(response.data.ChatroomStatusCode == 200 && this.$utility.IsArrayNotNullAndNotEmpty(response.data.Data.MessageLogs))
                             {
-                                console.log('add', response.data.Data);
-                                this.messageLog.push(response.data.Data);
+                                console.log('add', response.data.Data.MessageLogs);
+
+                                response.data.Data.MessageLogs.forEach((item) =>{
+                                    this.messageLog.push(item);
+                                })
+
                                 this.SetMessageCache();
                             }    
           
                             this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
                         })
-                    }
                 })
         },
 
         InitSignalR()
         {
+            if(this.hubConnection)
+            {
+                this.hubConnection.stop().then(() => {
+                    // alert('stop hubConnection');
+                });
+            }
+
+            this.isLoadingCompleted = false;
+
             this.hubConnection = new signalR.HubConnectionBuilder()
                 .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
                     accessTokenFactory: () => this.$store.state.auth.token
@@ -620,6 +645,8 @@ export default
                 this.hubConnection.start();
 
                 this.hubConnection.on("ReceiveMessage", (userName, messageId, message, sendTime, status)  => {
+
+                    console.log('ReceiveMessage', messageId);
                     this.messageLog.push({ 
                         GroupId: this.groupId, 
                         Status: status,
@@ -630,13 +657,14 @@ export default
                         SendTime: sendTime
                     });
                 });
+
+            this.InitMessageLogData();
         },
 
         SetMessageCache()
         {
-            this.messageLogCount = this.messageLog.length;
-
-            set(this.groupId, JSON.stringify(this.messageLog), this.groupMessageDB)
+            let groupMessageDB = createStore(`messageDB-${this.groupId}`, this.groupId);
+            set(this.groupId, JSON.stringify(this.messageLog), groupMessageDB)
                 .then(() => {
                         console.log('set 儲存成功');
                 });
@@ -651,6 +679,7 @@ export default
             }
         },
 
+        //取得左邊聊天室列表
         GetChatroomList(){
             this.$api.v1.chatroom.getChatroomList()
                 .then((response) =>{
@@ -664,6 +693,8 @@ export default
         SetGroup(group)
         {
             console.log('SetGroup',group.ChatroomId, group.UserId);
+            
+            this.messageLog = [];
 
             if(group.ChatroomId == "00000000-0000-0000-0000-000000000000")
             {
@@ -682,6 +713,8 @@ export default
             else{
                 this.groupId = group.ChatroomId;
             }
+
+            this.InitSignalR();
         }
     }
 }

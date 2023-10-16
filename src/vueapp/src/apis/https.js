@@ -29,37 +29,38 @@ instance.interceptors.request.use(function (config) {
     }
         
     return config;
-  }, function (error) {
+  }, (error) => {
+    console.log('interceptors request error', error);
+
+    if (error.response) {
+        errorHandle(error.status, error.data.error);
+    }
+    else{
+        alert('登入驗證已失效');
+        router.push('/login')
+        return;
+    }
+
     return Promise.reject(error);
   });
 
   instance.interceptors.response.use(function (response) {
-    console.log('interceptors response', response);
+    // console.log('interceptors response', response);
     return response;
   },  (error) => {
-    const { response } = error;
 
-    console.log('response error', error);
-    console.log('response error2', response);
+    console.log('interceptors.response error', error.response);
 
-    if(response){
-        errorHandle(response.status, response.data.error);
+    if (error.response) {
+        errorHandle(error.status, error.data.error);
     }
     else{
-        //回傳一個以 reason 拒絕的 Promise 物件
-        // alert('連線失敗，後台掛掉或沒網路')
-
-        router.push("/login");
-
-        store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
-    
-        window.localStorage.setItem('userData', JSON.stringify({ 
-              token:'',
-              userName: '',
-              isLogin: false, 
-          }));
-        // return Promise.reject(error);
+        alert('登入驗證已失效');
+        router.push('/login')
+        return;
     }
+
+    return Promise.reject(error);
   });
 
 
@@ -73,7 +74,7 @@ const errorHandle = (status, msg) => {
             break;
         case 401:
             alert('登入驗證已失效');
-            this.$router.push('/login')
+            router.push('/login')
             break;
         default:
             console.error('未知的status', status);

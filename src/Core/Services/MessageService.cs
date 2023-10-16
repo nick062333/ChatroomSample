@@ -31,7 +31,7 @@ namespace Core.Services
             {
                 MaxMessageId = result.Max(x => x.Id),
                 MixMessageId = result.Min(x => x.Id),
-                MessageLogs = result,
+                MessageLogs = result.OrderBy(x => x.Id).ToList(),
                 Count = result.Count 
             };
         }
