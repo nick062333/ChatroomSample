@@ -392,7 +392,7 @@
                                     item.SendUserId == this.$store.state.auth.userId ? 'other-message' : 'my-message',
                                     item.SendUserId == this.$store.state.auth.userId ? 'float-right': ''
                                 ]">
-                                <!-- {{ item.Id }}.   -->
+                                ({{ item.Id }}).  <br>
                                 {{ item.Message }}
                                      
                                      <!-- {{ item.SendUserId }} 
@@ -437,7 +437,8 @@ export default
             isSendMessage: true,
             tmpMessage:"",
             messageLog:[],
-            isLoadingCompleted:false
+            isGroupLoadingCompleted:false,
+            isMessageLoading:false
         }
     },
     watch: {
@@ -509,12 +510,12 @@ export default
 
             this.isSendMessage = true;
         },
-        GetMessageLogList()
+        GetMessageList()
         {
-            console.log('GetMessageLogList');
+            console.log('getMessageList');
             //isLoadingCompleted
 
-            if(this.isLoadingCompleted){
+            if(this.isGroupLoadingCompleted){
                 return;
             }
 
@@ -525,10 +526,11 @@ export default
             const minMessageId = Math.min(...ids);
             console.log('minMessageId', minMessageId); 
 
-            this.$api.v1.message.getMessageLogList({ 
+            this.$api.v1.message.getMessageList({ 
                     chatroomId: this.groupId, 
                     messageId: minMessageId,
-                    queryModeType: 2
+                    queryModeType: 2,
+                    maxCount:20
                 })
                 .then((response) => {
                     let responseData = response.data;
@@ -543,10 +545,17 @@ export default
                             });
 
                             this.SetMessageCache();
+
+                            this.isMessageLoading = false;
+
+
+                            this.$nextTick(() => {
+                            this.$refs.messageBox.scrollTop = 750;
+                        });
                         }
                         else{
 
-                            this.isLoadingCompleted = true;
+                            this.isGroupLoadingCompleted = true;
                         }
                     }
                 
@@ -565,11 +574,19 @@ export default
                     let getMessageInfoRequest = { 
                             chatroomId: this.groupId, 
                             messageId: 0,
-                            queryModeType: 1
+                            queryModeType: 1,
+                            maxCount:20
                         };
 
                     if(val) {
                         this.messageLog = JSON.parse(val);
+
+                        console.log('set message', 
+                        this.$refs.messageBox , 
+                        this.$refs.messageBox.target,
+                        this.$refs.messageBox.scrollTop,
+                        this.$refs.messageBox.scrollHeight
+                        );
 
                         const ids = this.messageLog.map(object => {
                             return object.Id;
@@ -596,9 +613,13 @@ export default
 
                                 this.SetMessageCache();
                             }    
-          
-                            this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+
+                            this.$nextTick(() => {
+                                    this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                                });
                         })
+
+
                 })
         },
 
@@ -611,7 +632,7 @@ export default
                 });
             }
 
-            this.isLoadingCompleted = false;
+            this.isGroupLoadingCompleted = false;
 
             this.hubConnection = new signalR.HubConnectionBuilder()
                 .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
@@ -673,9 +694,10 @@ export default
         HandleScroll (e) {
             console.log(e.target.scrollTop);
 
-            if(e.target.scrollTop == 2000)
+            if(e.target.scrollTop == 0 && this.isMessageLoading == false)
             {
-                this.GetMessageLogList();
+                this.isMessageLoading = true;
+                this.GetMessageList();
             }
         },
 

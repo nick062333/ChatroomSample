@@ -23,15 +23,19 @@ namespace Core.Services
              List<MessageLogModel> result;
 
             if(request.QueryModeType == QueryModeType.NewMessage)
+            {
                 result = await _messageLogService.GetNewMessageListAsync(request.ChatroomId, request.MessageId, request.MaxCount);
-            else
+                result = result.OrderBy(x => x.Id).ToList();
+            }
+            else{
                 result = await _messageLogService.GetHistoryMessageListAsync(request.ChatroomId, request.MessageId, request.MaxCount);
+            }
 
             return new GetMessageLogListByIdRangeResponse()
             {
-                MaxMessageId = result.Max(x => x.Id),
-                MixMessageId = result.Min(x => x.Id),
-                MessageLogs = result.OrderBy(x => x.Id).ToList(),
+                MaxMessageId = result.Any() ? result.Max(x => x.Id) : 0,
+                MixMessageId =  result.Any() ? result.Min(x => x.Id) : 0,
+                MessageLogs = result,
                 Count = result.Count 
             };
         }

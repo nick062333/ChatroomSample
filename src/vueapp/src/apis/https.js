@@ -36,7 +36,7 @@ instance.interceptors.request.use(function (config) {
         errorHandle(error.status, error.data.error);
     }
     else{
-        alert('登入驗證已失效');
+        // alert('登入驗證已失效');
         router.push('/login')
         return;
     }
@@ -55,7 +55,7 @@ instance.interceptors.request.use(function (config) {
         errorHandle(error.status, error.data.error);
     }
     else{
-        alert('登入驗證已失效');
+        // alert('登入驗證已失效');
         router.push('/login')
         return;
     }
