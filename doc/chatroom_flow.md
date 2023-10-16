@@ -44,17 +44,17 @@ participant indexDB as IndexedDB(前端)
 
 web ->> indexDB:取得聊天室暫存資訊
 
-
 alt 目前聊天室尚無訊息
-    web ->> webapi:取得最新的20筆訊息
+    web ->> webapi:取得最新的前20筆訊息
     webapi -->> web:return 訊息
     web ->> indexDB:進行暫存
-else
-    web ->> web:取得頁面中訊息的max id
-    web ->> webapi:取得max id之後產生的訊息內
+else 已有訊息
+    web ->> webapi:取得所有最新訊息
     webapi -->> web:return 訊息
     web ->> indexDB:進行暫存
 end
+
+web ->> web:顯示訊息
 
 ```
 
@@ -66,11 +66,12 @@ sequenceDiagram
 participant web as web(前端)
 participant hub as SigalR(後端)
 participant db as MS SQL
+participant indexdb as IndexedDB(前端)
 
 web ->> hub:發送訊息
 hub ->> db:儲存訊息
 db -->> hub:retrun
 hub -->> web:retrun
 web -->> web:將訊息顯示於聊天室
-
+web ->> indexdb:訊息暫存
 ```

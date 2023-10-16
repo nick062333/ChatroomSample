@@ -581,13 +581,6 @@ export default
                     if(val) {
                         this.messageLog = JSON.parse(val);
 
-                        console.log('set message', 
-                        this.$refs.messageBox , 
-                        this.$refs.messageBox.target,
-                        this.$refs.messageBox.scrollTop,
-                        this.$refs.messageBox.scrollHeight
-                        );
-
                         const ids = this.messageLog.map(object => {
                             return object.Id;
                         });
@@ -596,6 +589,7 @@ export default
                         console.log('maxMessageId',ids, maxMessageId); 
 
                         getMessageInfoRequest.messageId = maxMessageId;
+                        getMessageInfoRequest.maxCount = 0;
                     }
                     
                     //確認有無尚未顯示的訊息
