@@ -67,6 +67,19 @@
     <Build Include="dbo\Stored Procedures\usp_MessageLog_Insert.sql" />
     <Build Include="dbo\Tables\User.sql" />
     <Build Include="dbo\Stored Procedures\usp_User_Insert.sql" />
+    <Build Include="dbo\Tables\ChatroomMember.sql" />
+    <Build Include="dbo\Tables\Chatroom.sql" />
+    <Build Include="dbo\Stored Procedures\usp_User_GetList.sql" />
+    <Build Include="dbo\Stored Procedures\usp_User_Get.sql" />
+    <Build Include="dbo\Stored Procedures\usp_MessageLog_GroupTotalCount_Get.sql" />
+    <Build Include="dbo\Stored Procedures\usp_MessageLog_GetNewMessageListCount.sql" />
+    <Build Include="dbo\Stored Procedures\usp_MessageLog_GetNewMessageList.sql" />
+    <Build Include="dbo\Stored Procedures\usp_MessageLog_GetHistoryListCount.sql" />
+    <Build Include="dbo\Stored Procedures\usp_MessageLog_GetHistoryList.sql" />
+    <Build Include="dbo\Stored Procedures\usp_ChatroomMember_GetListByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\usp_ChatroomMember_GetList.sql" />
+    <Build Include="dbo\Stored Procedures\usp_ChatroomMember_Add.sql" />
+    <Build Include="dbo\Stored Procedures\usp_Chatroom_Add.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Snapshots\ChatrommDB_20231011_11-27-46.dacpac" />

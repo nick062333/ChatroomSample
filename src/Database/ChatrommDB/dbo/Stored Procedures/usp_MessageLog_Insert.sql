@@ -5,22 +5,24 @@
 -- ============================================= 
 
 CREATE PROCEDURE [dbo].[usp_MessageLog_Insert]
-    @ChatroomId uniqueidentifier,
+    @GroupId uniqueidentifier,
     @SendUserId bigint,
     @Message VARCHAR(max),
     @SendTime datetime
 AS
 BEGIN
-    INSERT INTO [dbo].[Message]
-               ([ChatroomId]
+    INSERT INTO [dbo].[MessageLog]
+               ([GroupId]
                ,[SendUserId]
                ,[Status]
                ,[Message]
                ,[SendTime])
          VALUES
-               (@ChatroomId
+               (@GroupId
                ,@SendUserId
                ,1
                ,@Message
                ,@SendTime)
+
+	SELECT SCOPE_IDENTITY() AS Id
 END;

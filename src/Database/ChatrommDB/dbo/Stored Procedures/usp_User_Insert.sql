@@ -6,7 +6,7 @@
 
 CREATE PROCEDURE [dbo].[usp_User_Insert]
     @Account varchar(20),
-    @Password datetime,
+    @Password char(64),
     @UserName nvarchar(20),
     @CreateTime datetime
 AS
