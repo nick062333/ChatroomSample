@@ -12,5 +12,7 @@ namespace Adapter.DBModel
         public ChatroomType ChatroomType { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        public List<long> UserIds { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using DataClass.DTOs;
 using DataClass.Models;
 using DataService;
 using DataClass.Enums;
+using Adapter.DBModel;
 
 namespace Core.Services
 {
@@ -20,7 +21,12 @@ namespace Core.Services
 
         public async Task<ChatroomModel> AddChatroomAsync(AddChatroomRequest addChatroomRequest)
         {
-            ChatroomModel chatroom = new()
+            var chatroom = await _chatroomDataService.GetChatroomAsync(addChatroomRequest.UserId, addChatroomRequest.ToUserId);
+
+            if(chatroom != null)
+                return chatroom;
+
+            chatroom = new()
             {
                 ChatroomId = Guid.NewGuid(),
                 ChatroomType = ChatroomType.OneToOne
@@ -44,7 +50,7 @@ namespace Core.Services
 
         public async Task<List<ChatroomModel>> GetChatroomListAsnyc(long userId)
         {
-            var chatroomList = await _chatroomDataService.GetChatroomListAsnyc(userId);
+            var chatroomList = await _chatroomDataService.GetChatroomListAsync(userId);
             return chatroomList
                     .Where(x => !x.UserId.Equals(userId))
                     .OrderByDescending(x => x.LastLoginTime)

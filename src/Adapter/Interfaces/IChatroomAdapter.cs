@@ -6,7 +6,7 @@ namespace Adapter.Interfaces
     public interface IChatroomAdapter
     {
         /// <summary>
-        /// 取得聊天室
+        /// 取得使用者的聊天室
         /// </summary>
         /// <returns>聊天室資訊</returns>
         Task<IEnumerable<ChatroomMember>> GetChatroomListAsnyc();

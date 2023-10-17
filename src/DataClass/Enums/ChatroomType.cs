@@ -2,6 +2,8 @@ namespace DataClass.Enums
 {
     public enum ChatroomType
     {
+        Unbeknown = 0,
+
         /// <summary>
         /// 私人聊天室
         /// </summary>

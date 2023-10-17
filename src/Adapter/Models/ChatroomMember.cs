@@ -1,4 +1,6 @@
-﻿namespace Adapter.Models
+﻿using DataClass.Enums;
+
+namespace Adapter.Models
 {
     /// <summary>
     /// 聊天室成員
@@ -11,7 +13,7 @@
         public Guid ChatroomId { get; set; }
 
         /// <summary>
-        /// 使用者id
+        /// 傳送者
         /// </summary>
         public long UserId { get; set; }
 
@@ -30,5 +32,11 @@
         /// 最後登入時間
         /// </summary>
         public DateTime LastLoginTime { get; set; }
+
+        /// <summary>
+        /// 聊天室類型
+        /// </summary>
+        /// <value></value>
+        public ChatroomType ChatroomType { get; set; }
     }
 }

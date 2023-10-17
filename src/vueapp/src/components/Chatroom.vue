@@ -297,7 +297,7 @@
                             <div class="about">
                                 <div class="name" >
                                     {{ item.UserName }}<br>
-                                     <!-- {{ item.ChatroomId  }} -->
+                                     {{ item.ChatroomId  }}
                                 </div>
                                 <!-- <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                             -->
                             </div>
@@ -723,14 +723,14 @@ export default
                             console.log('addChatroom', response);
                             group.ChatroomId = response.data.Data.ChatroomId;
                             this.groupId = group.ChatroomId;
+                            this.InitSignalR();
                         }
                     });
             }
             else{
                 this.groupId = group.ChatroomId;
+                this.InitSignalR();
             }
-
-            this.InitSignalR();
         }
     }
 }

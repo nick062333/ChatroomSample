@@ -20,6 +20,7 @@ namespace Adapter.Adapters
             var param = new DynamicParameters();
             param.Add("@ChatroomId", chatroomMember.ChatroomId, DbType.Guid);
             param.Add("@UserId", chatroomMember.UserId, dbType: DbType.Int64);
+            // param.Add("@ToUserId", chatroomMember.UserId, dbType: DbType.Int64);
             param.Add("@EntryTime", TwDateTime.Now, dbType: DbType.DateTime);
 
             await _unitOfWork.Connection.ExecuteAsync("usp_ChatroomMember_Add",param, _unitOfWork.Transaction, commandType: CommandType.StoredProcedure);

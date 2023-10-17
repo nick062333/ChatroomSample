@@ -21,6 +21,14 @@ namespace Adapter.Adapters
             return await _unitOfWork.Connection.QueryFirstOrDefaultAsync<User>("usp_User_Get", param, commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<IEnumerable<User>> GetUserAsync()
+        {
+            // var param = new DynamicParameters();
+            // param.Add("@Account", account, dbType: DbType.String);
+
+            return await _unitOfWork.Connection.QueryAsync<User>("usp_User_GetList", commandType: CommandType.StoredProcedure);
+        }
+
         public async Task InsertUserAsync(User user)
         {
             var param = new DynamicParameters();

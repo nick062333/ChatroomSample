@@ -6,6 +6,8 @@ namespace Adapter.Interfaces
     {
         Task<User> GetUserAsync(string account);
 
-        public Task InsertUserAsync(User user);
+        Task InsertUserAsync(User user);
+
+        Task<IEnumerable<User>> GetUserAsync();
     }
 }
