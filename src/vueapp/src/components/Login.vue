@@ -73,7 +73,7 @@ export default{
 </script>
 <template>
 <br />
-
+<h2>登入</h2>
 <form class="row g-3">
         <div class="mb-3 row">
             <label for="staticEmail" class="col-sm-2 col-form-label">帳號</label>
