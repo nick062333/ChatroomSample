@@ -296,7 +296,7 @@
                             
                             <div class="about">
                                 <div class="name" >
-                                    {{ item.UserName }}<br>
+                                    {{ item.UserName }} ({{ item.UserId }})<br>
                                      {{ item.ChatroomId  }}
                                 </div>
                                 <!-- <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                             -->
