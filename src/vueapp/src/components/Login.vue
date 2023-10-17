@@ -51,7 +51,7 @@ export default{
 
             })
             .catch((error) => {
-                this.$store.dispatch('auth/setAuth',);
+                this.$store.dispatch('auth/setAuth',{ token : '', userName:'', userId:'', isLogin : false });
 
                 window.localStorage.setItem('userData', JSON.stringify({ 
                     token:'',
@@ -60,8 +60,9 @@ export default{
                     isLogin:false, 
                 }));
 
-                alert('登入失敗1');
+                alert('登入失敗，伺服器異常請稍後在試');
             })
+            .error
         },
 
         Register(){
