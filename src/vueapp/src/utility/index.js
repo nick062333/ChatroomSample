@@ -12,7 +12,6 @@ const utility = {
               isLogin: false, 
           }));
     
-        alert('已登出');
         $router.push("/Login");
     },
 

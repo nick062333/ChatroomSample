@@ -1,10 +1,23 @@
 <script>
- export default{
+
+
+export default{
     data(){
         return {
             account : '',
             password : ''
         }
+    },
+    created(){
+
+        //TODO:需調整至共用方法
+        this.$store.dispatch('auth/setAuth',{ token : '', userName:'', isLogin : false });
+    
+        window.localStorage.setItem('userData', JSON.stringify({ 
+              token:'',
+              userName: '',
+              isLogin: false, 
+          }));
     },
     methods:{
         Login()
@@ -58,9 +71,10 @@
     }
  }
 </script>
-
 <template>
-    <form class="row g-3">
+<br />
+
+<form class="row g-3">
         <div class="mb-3 row">
             <label for="staticEmail" class="col-sm-2 col-form-label">帳號</label>
             <div class="col-sm-10">

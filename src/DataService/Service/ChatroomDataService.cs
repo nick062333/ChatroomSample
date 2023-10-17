@@ -26,16 +26,17 @@ namespace DataService.Service
             _mapper = mapper;
         }
 
-        public async Task AddChatroomAsync(ChatroomModel chatroomModel)
+        public async Task AddChatroomAsync(ChatroomModel chatroomModel, List<ChatroomMemberModel> chatroomMemberModels)
         {
-            var chatroom = _mapper.Map<Chatroom>(chatroomModel);
-            var chatroomMember = _mapper.Map<ChatroomMember>(chatroomModel);
-
             _unitOfWork.BeginTransaction();
-            await _chatroomAdapter.AddChatroomAsync(chatroom);
-            await _chatroomMemberAdapter.AddChatroomMemberAsync(chatroomMember);
-            _unitOfWork.Commit();
 
+            var chatroom = _mapper.Map<Chatroom>(chatroomModel);
+            var chatroomMembers = _mapper.Map<List<ChatroomMember>>(chatroomMemberModels);
+            await _chatroomAdapter.AddChatroomAsync(chatroom);
+            foreach(var member in chatroomMembers){
+                await _chatroomMemberAdapter.AddChatroomMemberAsync(member);
+            }
+            _unitOfWork.Commit();
         }
 
         public async Task<List<ChatroomModel>> GetChatroomListAsnyc()

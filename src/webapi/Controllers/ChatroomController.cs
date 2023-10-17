@@ -21,7 +21,8 @@ namespace webapi.Controllers
         public async Task<ActionResult> CreateAsync(AddChatroomModel addChatroomModel)
         {
             var chatroom = await _chatroomService.AddChatroomAsync(new AddChatroomRequest(){
-                UserId = addChatroomModel.UserId
+                UserId = GetUserId(),
+                ToUserId = addChatroomModel.ToUserId,
             });
 
             return Ok(chatroom);

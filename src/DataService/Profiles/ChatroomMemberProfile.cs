@@ -10,6 +10,10 @@ namespace DataService.Profiles
            CreateMap<ChatroomModel , ChatroomMember>()
                 .ForMember(x => x.ChatroomId, opt => opt.MapFrom(s => s.ChatroomId))
                 .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.UserId));
+
+            CreateMap<ChatroomMemberModel , ChatroomMember>()
+                .ForMember(x => x.ChatroomId, opt => opt.MapFrom(s => s.ChatroomId))
+                .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.UserId));
         }   
     }
 }

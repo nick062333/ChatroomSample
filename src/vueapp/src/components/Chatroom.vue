@@ -392,7 +392,7 @@
                                     item.SendUserId == this.$store.state.auth.userId ? 'other-message' : 'my-message',
                                     item.SendUserId == this.$store.state.auth.userId ? 'float-right': ''
                                 ]">
-                                ({{ item.Id }}).  <br>
+                                <!-- ({{ item.Id }}).  <br> -->
                                 {{ item.Message }}
                                      
                                      <!-- {{ item.SendUserId }} 
@@ -688,7 +688,7 @@ export default
         HandleScroll (e) {
             console.log(e.target.scrollTop);
 
-            if(e.target.scrollTop == 0 && this.isMessageLoading == false)
+            if(e.target.scrollTop <= 0 && this.isMessageLoading == false)
             {
                 this.isMessageLoading = true;
                 this.GetMessageList();
@@ -715,7 +715,7 @@ export default
             if(group.ChatroomId == "00000000-0000-0000-0000-000000000000")
             {
                 this.$api.v1.chatroom.addChatroom({
-                    userId: group.UserId
+                    toUserId: group.UserId
                 })
                     .then((response) => {
                         if(response.data.ChatroomStatusCode == 200)

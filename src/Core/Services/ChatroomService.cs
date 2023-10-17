@@ -1,7 +1,9 @@
-﻿using AutoMapper;
+﻿using Adapter.Models;
+using AutoMapper;
 using DataClass.DTOs;
 using DataClass.Models;
 using DataService;
+using DataClass.Enums;
 
 namespace Core.Services
 {
@@ -21,17 +23,28 @@ namespace Core.Services
             ChatroomModel chatroom = new()
             {
                 ChatroomId = Guid.NewGuid(),
-                UserId = addChatroomRequest.UserId
+                ChatroomType = ChatroomType.OneToOne
             };
 
-            await _chatroomDataService.AddChatroomAsync(chatroom);
+            List<ChatroomMemberModel> chatroomMembers = new(){
+                new(){
+                    ChatroomId = chatroom.ChatroomId,
+                    UserId = addChatroomRequest.UserId
+                },
+                new(){
+                    ChatroomId = chatroom.ChatroomId,
+                    UserId = addChatroomRequest.ToUserId
+                }
+            };
+
+            await _chatroomDataService.AddChatroomAsync(chatroom, chatroomMembers);
 
             return chatroom;
         }
 
         public async Task<List<ChatroomModel>> GetChatroomListAsnyc(long userId)
         {
-            var chatroomList = await _chatroomDataService.GetChatroomListAsnyc();
+            var chatroomList = await _chatroomDataService.GetChatroomListAsnyc(userId);
             return chatroomList
                     .Where(x => !x.UserId.Equals(userId))
                     .OrderByDescending(x => x.LastLoginTime)

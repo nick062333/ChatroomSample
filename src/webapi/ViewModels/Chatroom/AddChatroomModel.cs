@@ -4,7 +4,7 @@ namespace webapi.ViewModels.Chatroom
 {
     public class AddChatroomModel
     {
-        [JsonPropertyName("userId")]
-        public long UserId { get; set; }
+        [JsonPropertyName("toUserId")]
+        public long ToUserId {get;set; }
     }
 }
