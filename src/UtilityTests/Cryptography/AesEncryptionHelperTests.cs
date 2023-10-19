@@ -10,7 +10,7 @@ namespace Utility.Tests
     [TestClass()]
     public class AesEncryptionHelperTests
     {
-        private static AesEncryptionHelper _mockAesEncryptionHelper { get; set; }
+        private static AesEncryptionHelper? _mockAesEncryptionHelper { get; set; }
 
         [AssemblyInitialize()]
         public static void AssemblyInitialize(TestContext testContext)
@@ -47,7 +47,7 @@ namespace Utility.Tests
         [DataRow(@"需加密的訊息!<br>aABC!2345測試ａｂｃ", @"ip/B+FBnR2LJ/RHIpSyCNEE8fMozu/0H1RXH9tBULP1KgbgCT0hziWp/HvQSuS/0")]
         public void EncryptTest(string message, string expected)
         {
-            string actual = _mockAesEncryptionHelper.Encrypt(message);
+            string actual = _mockAesEncryptionHelper!.Encrypt(message);
             Assert.AreEqual(expected, actual);
         }
 
@@ -56,7 +56,7 @@ namespace Utility.Tests
         [DataRow(@"需加密的訊息!<br>aABC!2345測試ａｂｃ", @"ip/B+FBnR2LJ/RHIpSyCNEE8fMozu/0H1RXH9tBULP1KgbgCT0hziWp/HvQSuS/0")]
         public void DecryptTest(string expected, string encryptText)
         {
-            string actual = _mockAesEncryptionHelper.Decrypt(encryptText);
+            string actual = _mockAesEncryptionHelper!.Decrypt(encryptText);
             Assert.AreEqual(expected, actual);
         }
 

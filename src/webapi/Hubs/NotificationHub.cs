@@ -2,9 +2,11 @@ using System.Security.Claims;
 using Core;
 using DataClass.DTOs;
 using DataClass.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Utility;
+using webapi.Events;
 using webapi.Models;
 
 namespace webapi.Hubs
@@ -12,14 +14,16 @@ namespace webapi.Hubs
     public class NotificationHub : Hub<INotificationClient>
     {
         private readonly IMessageService _messageService;
+        private readonly IMediator _mediator;
 
-        public NotificationHub(IMessageService messageService) {
+        public NotificationHub(IMessageService messageService, IMediator mediator) {
             _messageService = messageService;
+            _mediator = mediator;
         }
 
         [Authorize]
         [HubMethodName("send")]
-        public async Task SendMessage(NotificationRequest notification)
+        public async Task SendMessageAsync(NotificationRequest notification)
         {
             var httpContext = Context!.GetHttpContext();
 
@@ -42,6 +46,8 @@ namespace webapi.Hubs
             await Clients
                 .Group(groupId.ToString())
                 .ReceiveMessage(userName, messageId, notification.Message, TwDateTime.Now, MessageLogStatus.Enable);
+
+            await _mediator.Send(new ChatroomRemindNoticeSendEvent(groupId, userId, messageId));
         }
     }
 }

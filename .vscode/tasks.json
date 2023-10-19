@@ -78,16 +78,11 @@
             "type": "docker-run",
             "label": "docker-run: debug",
             "dependsOn": [
-                "docker-build"
+                "docker-build: debug"
             ],
-            "dockerRun": {
-                "env": {
-                    "DEBUG": "*",
-                    "NODE_ENV": "development"
-                }
-            },
-            "node": {
-                "package": "${workspaceFolder}/src/vite-web/package.json",
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/webapi/webapi.csproj",
                 "enableDebugging": true
             }
         },
@@ -95,11 +90,11 @@
             "type": "docker-run",
             "label": "docker-run: release",
             "dependsOn": [
-                "docker-build"
+                "docker-build: release"
             ],
-            "platform": "node",
-            "node": {
-                "package": "${workspaceFolder}/src/vite-web/package.json"
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/webapi/webapi.csproj"
             }
         },
         {

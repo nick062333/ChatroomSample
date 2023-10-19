@@ -16,7 +16,7 @@ namespace webapi.Controllers
             => base.Ok(new ResponseBase(ChatroomStatusCode.Success));
 
         [NonAction]
-        public override OkObjectResult Ok([ActionResultObjectValue] object? value) 
+        public override OkObjectResult Ok([ActionResultObjectValue] object value) 
             => base.Ok(new ResponseBase(value));
 
 

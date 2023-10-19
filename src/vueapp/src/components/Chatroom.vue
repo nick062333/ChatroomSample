@@ -629,14 +629,21 @@ export default
             this.isGroupLoadingCompleted = false;
 
             this.hubConnection = new signalR.HubConnectionBuilder()
-                .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
-                    accessTokenFactory: () => this.$store.state.auth.token
+                .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`,(options) => { 
+                    
+                    //傳遞 JWT Token
+                    options.accessTokenFactory = this.$store.state.auth.token;
+
+                    //無縫重新連線 (javascript客戶端尚未支援)
+                    // options.UseAcks = true;
+                    
                     // withCredentials: true,
                     // headers: {
                     //     "groupId": this.groupId
                     // },
                     // transport: signalR.HttpTransportType.LongPolling 
                 })
+                //斷線後重新連線
                 .withAutomaticReconnect({
                     nextRetryDelayInMilliseconds: retryContext => {
 
@@ -655,6 +662,8 @@ export default
                         })
                     }
                 })
+                .withServerTimeoutInMilliseconds(60000) //如果用戶端長時間未收到來自伺服器的 this 訊息，用戶端就會逾時
+                .withKeepAliveIntervalInMilliseconds(30000) //用戶端傳送 Ping 訊息的間隔
                 .build();
 
                 this.hubConnection.start();

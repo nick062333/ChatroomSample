@@ -5,6 +5,7 @@ using DataClass;
 using DataClass.Configs;
 using DataClass.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Utility.Registers;
@@ -85,6 +86,8 @@ try
 
     builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
 
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
     var app = builder.Build();
 
     app.UseSerilogRequestLogging();
@@ -106,6 +109,7 @@ try
     app.MapControllers();
 
     app.MapHub<NotificationHub>("/hub/notification");
+    app.MapHub<ChatroomRemindHub>("/hub/ChatroomRemindHub");
 
     // app.Use(async (context, next) =>
     // {

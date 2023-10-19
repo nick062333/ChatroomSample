@@ -8,12 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataClass\DataClass.csproj" />
-    <ProjectReference Include="..\Adapter\Adapter.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+	  <ProjectReference Include="..\Adapter\Adapter.csproj" />
+	  <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
 </Project>
