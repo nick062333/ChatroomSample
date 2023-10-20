@@ -8,6 +8,9 @@ namespace webapi.Validators.Tests
     [TestClass()]
     public class UserViewModelValidatorTests
     {
+        /// <summary>
+        /// 使用 FluentAssertions 驗證從前端提供參數(ViewModel)是否正確
+        /// </summary>
         [TestMethod()]
         public void UserViewModelValidatorTest()
         {
@@ -29,6 +32,7 @@ namespace webapi.Validators.Tests
             };
 
             //Assert.AreEqual(success, false);
+            //驗證結果是否正確
             success.Should().BeFalse();
             propertyErrorData.Should().BeEquivalentTo(expectedErrorData);
         }

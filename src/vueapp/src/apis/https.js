@@ -15,7 +15,7 @@ instance.interceptors.request.use(function (config) {
 
     //發request前判斷token存在時須在header加上token
 
-    console.log('request interceptors');
+    console.log('request interceptors', config.url);
 
     const token = store.state.auth.token;
     token && (config.headers.Authorization = 'Bearer ' + token);

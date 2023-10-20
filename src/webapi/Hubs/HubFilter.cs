@@ -1,9 +1,11 @@
 using DataClass.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Utility;
 
 namespace webapi
 {
+    [Authorize]
     public class HubFilter : IHubFilter
     {
         private readonly ILogger<HubFilter> _logger;

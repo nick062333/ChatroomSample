@@ -3,7 +3,6 @@ using Core;
 using DataClass.DTOs;
 using DataClass.Enums;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Utility;
 using webapi.Events;
@@ -21,7 +20,7 @@ namespace webapi.Hubs
             _mediator = mediator;
         }
 
-        [Authorize]
+        //[Authorize]
         [HubMethodName("send")]
         public async Task SendMessageAsync(NotificationRequest notification)
         {
@@ -47,7 +46,7 @@ namespace webapi.Hubs
                 .Group(groupId.ToString())
                 .ReceiveMessage(userName, messageId, notification.Message, TwDateTime.Now, MessageLogStatus.Enable);
 
-            await _mediator.Send(new ChatroomRemindNoticeSendEvent(groupId, userId, messageId));
+            //await _mediator.Send(new ChatroomRemindNoticeSendEvent(groupId, userId, messageId));
         }
     }
 }

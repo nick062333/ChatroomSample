@@ -296,8 +296,9 @@
                             
                             <div class="about">
                                 <div class="name" >
-                                    {{ item.UserName }} ({{ item.UserId }})<br>
-                                     {{ item.ChatroomId  }}
+                                    {{ item.UserName }}
+                                     <!-- ({{ item.UserId }})<br> -->
+                                     <!-- {{ item.ChatroomId  }} -->
                                 </div>
                                 <!-- <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>                                             -->
                             </div>
@@ -479,7 +480,7 @@ export default
     },
     methods:{
         SendMessage(){
-
+            let vm = this;
             this.isSendMessage = false;
             this.$api.auth.check()
                 .then((response) => {
@@ -491,12 +492,9 @@ export default
                             SendTime: new Date().toJSON()
                         })
                         .then(() =>{
-                            console.log('msg send',  this.$refs.messageBox);
-                            // this.$refs.messageBox.target.scrollTop = 
-
+                            // console.log('msg send',  this.$refs.messageBox);
                             this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-
-                            this.tmpMessage = '';
+                            vm.tmpMessage = "";
                         })
                         .catch((error) => {
                             console.log('send message error', error);
@@ -607,7 +605,8 @@ export default
 
                                 this.SetMessageCache();
                             }    
-
+                            
+                            //this.$nextTick()将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新
                             this.$nextTick(() => {
                                     this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
                                 });
@@ -629,19 +628,8 @@ export default
             this.isGroupLoadingCompleted = false;
 
             this.hubConnection = new signalR.HubConnectionBuilder()
-                .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`,(options) => { 
-                    
-                    //傳遞 JWT Token
-                    options.accessTokenFactory = this.$store.state.auth.token;
-
-                    //無縫重新連線 (javascript客戶端尚未支援)
-                    // options.UseAcks = true;
-                    
-                    // withCredentials: true,
-                    // headers: {
-                    //     "groupId": this.groupId
-                    // },
-                    // transport: signalR.HttpTransportType.LongPolling 
+                .withUrl(`https://localhost:7057/hub/notification?GroupId=${this.groupId}`, { 
+                    accessTokenFactory: () => this.$store.state.auth.token
                 })
                 //斷線後重新連線
                 .withAutomaticReconnect({
@@ -662,8 +650,8 @@ export default
                         })
                     }
                 })
-                .withServerTimeoutInMilliseconds(60000) //如果用戶端長時間未收到來自伺服器的 this 訊息，用戶端就會逾時
-                .withKeepAliveIntervalInMilliseconds(30000) //用戶端傳送 Ping 訊息的間隔
+                // .withServerTimeoutInMilliseconds(60000) //如果用戶端長時間未收到來自伺服器的 this 訊息，用戶端就會逾時
+                // .withKeepAliveIntervalInMilliseconds(30000) //用戶端傳送 Ping 訊息的間隔
                 .build();
 
                 this.hubConnection.start();

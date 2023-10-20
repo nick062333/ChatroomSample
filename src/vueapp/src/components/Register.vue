@@ -35,13 +35,7 @@
  }
 </script>
 <template>
-  <div class="row align-items-start">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page">註冊</li>
-        </ol>
-    </nav>
-  </div>
+<h2>註冊</h2><br>
   <div class="row align-items-center">
     <div class="col">
         <form class="row g-3">
